@@ -1,0 +1,6 @@
+projectKey=com.ventas:ventas
+serverUrl=http://localhost:9000
+serverVersion=9.0.0.45539
+dashboardUrl=http://localhost:9000/dashboard?id=com.ventas%3Aventas
+ceTaskId=AXrqh-0O8n9_J5IiUR-6
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AXrqh-0O8n9_J5IiUR-6
