@@ -126,6 +126,10 @@ public class Carrito {
     }
 
     public void setClient(ModeloCliente client){
-        this.client = client;
+        if(true){
+            this.client = client;
+        }
     }
+    
+    
 }
