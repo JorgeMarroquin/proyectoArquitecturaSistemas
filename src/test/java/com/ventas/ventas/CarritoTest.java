@@ -92,6 +92,5 @@ public class CarritoTest {
         assertEquals(200, carrito.getCarro().get(1).getSubtotal());
         assertEquals(90, carrito.getCarro().get(0).getTotal());
         assertEquals(180, carrito.getCarro().get(1).getTotal());
-        assertEquals(1, 2);
     }
 }
