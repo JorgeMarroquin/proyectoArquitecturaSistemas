@@ -20,7 +20,9 @@ stage 'Checkout'
           timeout(time: 1, unit: 'HOURS') {
               def qg = waitForQualityGate()
               if (qg.status != 'OK') {
-                emailext body: 'SonarQube have an error', subject: 'Quality Error', to: 'jorge.marroquin.ochoa@gmail.com'
+                   
+                  emailext body: 'SonarQube have an error', subject: 'Quality Error', to: 'jorge.marroquin.ochoa@gmail.com'
+                  mail bcc: '', body: 'SonarQube Failed', cc: '', from: '', replyTo: '', subject: 'QA failed', to: 'jorge.marroquin.ochoa@gmail.com'
                   error "Pipeline aborted due to quality gate failure: ${qg.status}"
               }
           }
