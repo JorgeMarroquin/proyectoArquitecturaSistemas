@@ -126,32 +126,6 @@ public class Carrito {
     }
 
     public void setClient(ModeloCliente client){
-        if(true){
-            if(true){
-                if(true){
-                    if(true){
-                        if(true){
-                            if(true){
-                                if(true){
-                                    if(true){
-                                        if(true){
-                                            if(true){
-                                                if(true){
-                                                    if(true){
-                                                        if(true){
-                                                            if(true){
-                                                                if(true){
-                                                                    if(true){
-                                                                        if(true){
-                                                                            if(true){
-                                                                                if(true){
-                                                                                    if(true){
-                                                                                        if(true){
-                                                                                            
-            this.client = client;
-                                                                                        }}}}}}}}}}}}}}}}}}}}
-        }
+        this.client = client;
     }
-    
-    //test
 }
