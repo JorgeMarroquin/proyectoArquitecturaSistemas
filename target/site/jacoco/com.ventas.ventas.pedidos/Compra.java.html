@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Compra.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ventas</a> &gt; <a href="index.source.html" class="el_package">com.ventas.ventas.pedidos</a> &gt; <span class="el_source">Compra.java</span></div><h1>Compra.java</h1><pre class="source lang-java linenums">package com.ventas.ventas.pedidos;
+
+import java.sql.Date;
+
+import com.ventas.ventas.Configuracion;
+
+public class Compra {
+<span class="nc" id="L8">    private Configuracion configuracion = new Configuracion();</span>
+
+    private int ordenid;
+    private int compraid;
+    private String telcodigo;
+    private int cantidad;
+    private float total;
+    private String estado;
+    private Date fecha;
+<span class="nc" id="L17">    private String tienda = configuracion.getTienda();</span>
+
+<span class="nc" id="L19">    public Compra(){</span>
+
+<span class="nc" id="L21">    }</span>
+
+    public int getCompraid() {
+<span class="nc" id="L24">        return compraid;</span>
+    }
+
+    public void setCompraid(int compraid) {
+<span class="nc" id="L28">        this.compraid = compraid;</span>
+<span class="nc" id="L29">    }</span>
+
+    public int getOrdenid() {
+<span class="nc" id="L32">        return ordenid;</span>
+    }
+
+    public void setOrdenid(int ordenid) {
+<span class="nc" id="L36">        this.ordenid = ordenid;</span>
+<span class="nc" id="L37">    }</span>
+
+    public String getTelcodigo() {
+<span class="nc" id="L40">        return telcodigo;</span>
+    }
+
+    public void setTelcodigo(String telcodigo) {
+<span class="nc" id="L44">        this.telcodigo = telcodigo;</span>
+<span class="nc" id="L45">    }</span>
+
+    public int getCantidad() {
+<span class="nc" id="L48">        return cantidad;</span>
+    }
+
+    public void setCantidad(int cantidad) {
+<span class="nc" id="L52">        this.cantidad = cantidad;</span>
+<span class="nc" id="L53">    }</span>
+
+    public float getTotal() {
+<span class="nc" id="L56">        return total;</span>
+    }
+
+    public void setTotal(float total) {
+<span class="nc" id="L60">        this.total = total;</span>
+<span class="nc" id="L61">    }</span>
+
+    public String getEstado() {
+<span class="nc" id="L64">        return estado;</span>
+    }
+
+    public void setEstado(String estado) {
+<span class="nc" id="L68">        this.estado = estado;</span>
+<span class="nc" id="L69">    }</span>
+
+    public Date getFecha() {
+<span class="nc" id="L72">        return fecha;</span>
+    }
+
+    public void setFecha(Date fecha) {
+<span class="nc" id="L76">        this.fecha = fecha;</span>
+<span class="nc" id="L77">    }</span>
+
+    public String getTienda() {
+<span class="nc" id="L80">        return tienda;</span>
+    }
+
+    public void setTienda(String tienda) {
+<span class="nc" id="L84">        this.tienda = tienda;</span>
+<span class="nc" id="L85">    }</span>
+
+    @Override
+    public String toString() {
+<span class="nc" id="L89">        return &quot;Orden &quot; + ordenid + &quot;, Teléfono &quot; + telcodigo + &quot;, Cantidad &quot; + cantidad + &quot;, Pago &quot; + total + &quot;, tipo &quot; + estado + &quot;, fecha &quot;</span>
+                + fecha + &quot;\n\n&quot;;
+    }
+
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

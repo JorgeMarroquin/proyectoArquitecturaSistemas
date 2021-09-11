@@ -1,0 +1,671 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Controlador.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ventas</a> &gt; <a href="index.source.html" class="el_package">com.ventas.ventas</a> &gt; <span class="el_source">Controlador.java</span></div><h1>Controlador.java</h1><pre class="source lang-java linenums">package com.ventas.ventas;
+
+import java.net.ConnectException;
+import java.time.*;
+import java.time.format.TextStyle;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import com.ventas.ventas.telefonos.*;
+import com.ventas.ventas.clientes.*;
+import com.ventas.ventas.fabricas.*;
+import com.ventas.ventas.tutorial.*;
+import com.ventas.ventas.users.*;
+import com.ventas.ventas.pedidos.*;
+import com.ventas.ventas.service.MailService;
+import com.ventas.ventas.vista.*;
+
+import org.hibernate.hql.spi.id.IdTableHelper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.annotation.Id;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.client.RestClientResponseException;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.ModelAndView;
+
+@Controller
+<span class="nc" id="L43">public class Controlador {</span>
+
+<span class="nc" id="L45">    private Configuracion configuracion = new Configuracion();</span>
+
+<span class="nc" id="L47">    private Carrito carrito = new Carrito();</span>
+<span class="nc" id="L48">    private boolean login = false;</span>
+<span class="nc" id="L49">    private Usuario user = new Usuario();</span>
+<span class="nc" id="L50">    private String msg = &quot;&quot;;</span>
+<span class="nc" id="L51">    private String msgCarrito = &quot;&quot;;</span>
+
+<span class="nc" id="L53">    private boolean existeCliente = false;</span>
+<span class="nc" id="L54">    private ModeloCliente cliente = new ModeloCliente();</span>
+
+<span class="nc" id="L56">    private String tiendaActual = configuracion.getTienda();</span>
+<span class="nc" id="L57">    private String contr = configuracion.getPasswordTienda();</span>
+
+    @Autowired
+    private MailService mailService;
+
+    @Autowired
+    private Dao dao;
+
+    @Autowired
+    private TelDao teldao;
+
+    @Autowired
+    private FabDao fabDao;
+    
+    @Autowired
+    private ClienteDao daoc;
+
+    @Autowired
+    private UsuarioDao userDao;
+
+    @Autowired
+    private PedidoDao pedidoDao;
+
+    @Autowired
+    private VistaDao vistaDao;
+
+    //TELEFONO------------------------------------------------------------------------------------------------
+    @RequestMapping(&quot;/telefonos&quot;)
+    public String telefonosPage(final Model telefono) {
+<span class="nc" id="L86">        final List&lt;Telefono&gt; listTel = teldao.list();</span>
+<span class="nc" id="L87">        telefono.addAttribute(&quot;listTel&quot;, listTel);</span>
+<span class="nc" id="L88">        telefono.addAttribute(&quot;usuario&quot;, this.user);</span>
+<span class="nc" id="L89">        return &quot;telefonos/telefonos.html&quot;;</span>
+    }
+    
+    @RequestMapping(&quot;/newTel&quot;)
+    public String telefonoNew(Model model) {
+<span class="nc" id="L94">        Telefono nuevoTel = new Telefono();</span>
+<span class="nc" id="L95">        model.addAttribute(&quot;nuevoTel&quot;, nuevoTel);</span>
+<span class="nc" id="L96">        final List&lt;Telefono&gt; listMar = teldao.listMarcas();</span>
+<span class="nc" id="L97">        model.addAttribute(&quot;usuario&quot;, this.user);</span>
+<span class="nc" id="L98">        model.addAttribute(&quot;listMar&quot;, listMar);</span>
+<span class="nc" id="L99">        return &quot;telefonos/telefonosNew.html&quot;;</span>
+    }
+
+    @RequestMapping(value = &quot;/saveTel&quot;, method = RequestMethod.POST)
+    public String telefonoSave(@ModelAttribute(&quot;newtel&quot;) Telefono newtel) {
+<span class="nc" id="L104">    teldao.save(newtel);</span>
+<span class="nc" id="L105">    userDao.newLog(&quot;Nuevo telefono Codigo:  &quot; + newtel.getTelcodigo(), this.user.getUsuarioid(), &quot;TELEFONOS&quot;);</span>
+<span class="nc" id="L106">    return &quot;redirect:/telefonos&quot;;</span>
+    }
+
+    @RequestMapping(&quot;/editTel/{id}&quot;)
+    public ModelAndView telefonoEdit(@PathVariable(name = &quot;id&quot;) String id) {
+<span class="nc" id="L111">        ModelAndView mav = new ModelAndView(&quot;telefonos/telefonosUpdate.html&quot;);</span>
+<span class="nc" id="L112">        Telefono telefono = teldao.get(id);</span>
+<span class="nc" id="L113">        List&lt;Telefono&gt; listMar = teldao.listMarcas();</span>
+<span class="nc" id="L114">        List&lt;Telefono&gt; listFotos = teldao.listFotos(id);</span>
+<span class="nc" id="L115">        Telefono fotoVacia = new Telefono();</span>
+<span class="nc" id="L116">        mav.addObject(&quot;listMar&quot;, listMar);</span>
+<span class="nc" id="L117">        mav.addObject(&quot;telefono&quot;, telefono);</span>
+<span class="nc" id="L118">        mav.addObject(&quot;listFotos&quot;, listFotos);</span>
+<span class="nc" id="L119">        mav.addObject(&quot;fotoVacia&quot;, fotoVacia);</span>
+<span class="nc" id="L120">        mav.addObject(&quot;usuario&quot;, this.user);</span>
+<span class="nc" id="L121">        mav.addObject(&quot;msg&quot;, this.msg);</span>
+<span class="nc" id="L122">        this.msg = &quot;&quot;;</span>
+<span class="nc" id="L123">        return mav;</span>
+    }
+
+    @RequestMapping(&quot;/verTel/{id}&quot;)
+    public ModelAndView telefonoVer(@PathVariable(name = &quot;id&quot;) String id) {
+<span class="nc" id="L128">        ModelAndView mav = new ModelAndView(&quot;telefonos/telefonosVer.html&quot;);</span>
+<span class="nc" id="L129">        Telefono telefono = teldao.get(id);</span>
+<span class="nc" id="L130">        List&lt;Telefono&gt; listMar = teldao.listMarcas();</span>
+<span class="nc" id="L131">        List&lt;Telefono&gt; listFotos = teldao.listFotos(id);</span>
+<span class="nc" id="L132">        Telefono fotoVacia = new Telefono();</span>
+<span class="nc" id="L133">        mav.addObject(&quot;listMar&quot;, listMar);</span>
+<span class="nc" id="L134">        mav.addObject(&quot;telefono&quot;, telefono);</span>
+<span class="nc" id="L135">        mav.addObject(&quot;listFotos&quot;, listFotos);</span>
+<span class="nc" id="L136">        mav.addObject(&quot;fotoVacia&quot;, fotoVacia);</span>
+<span class="nc" id="L137">        mav.addObject(&quot;usuario&quot;, this.user);</span>
+<span class="nc" id="L138">        mav.addObject(&quot;msg&quot;, this.msg);</span>
+<span class="nc" id="L139">        this.msg = &quot;&quot;;</span>
+<span class="nc" id="L140">        return mav;</span>
+    }
+
+    @RequestMapping(value = &quot;/saveFoto&quot;, method = RequestMethod.POST)
+    public String fotoSave(@RequestParam String idtel, @ModelAttribute(&quot;fotoVacia&quot;) Telefono fotoVacia) {
+<span class="nc bnc" id="L145" title="All 2 branches missed.">        if(!fotoVacia.getFoto().equals(&quot;&quot;)){</span>
+<span class="nc" id="L146">            fotoVacia.setTelcodigo(idtel);</span>
+<span class="nc" id="L147">            teldao.saveFoto(fotoVacia);</span>
+        }
+<span class="nc" id="L149">        userDao.newLog(&quot;Nueva foto para telefono Codigo:  &quot; + fotoVacia.getTelcodigo(), this.user.getUsuarioid(), &quot;FOTOS&quot;);</span>
+<span class="nc" id="L150">        return &quot;redirect:/editTel/&quot;+idtel;</span>
+    }
+
+    @RequestMapping(&quot;/deleteFoto/{id}/{idtel}&quot;)
+    public String fotoDelete(@PathVariable(name = &quot;id&quot;) String id, @PathVariable(name = &quot;idtel&quot;) String idtel) {
+<span class="nc" id="L155">        teldao.deleteFoto(id);</span>
+<span class="nc" id="L156">        userDao.newLog(&quot;Foto eliminada para telefono Codigo:  &quot; + id, this.user.getUsuarioid(), &quot;FOTOS&quot;);</span>
+<span class="nc" id="L157">        return &quot;redirect:/editTel/&quot;+idtel;</span>
+    }
+        
+    @RequestMapping(value = &quot;/updateTel&quot;, method = RequestMethod.POST)
+    public String telefonoUpdate(@ModelAttribute(&quot;telefono&quot;) Telefono telefono) {
+<span class="nc" id="L162">        teldao.update(telefono);</span>
+<span class="nc" id="L163">        System.out.println(telefono.getPreciofabrica());</span>
+<span class="nc" id="L164">        userDao.newLog(&quot;Telefono editado Codigo:  &quot; + telefono.getTelcodigo(), this.user.getUsuarioid(), &quot;TELEFONOS&quot;);</span>
+<span class="nc" id="L165">        return &quot;redirect:/telefonos&quot;;</span>
+    }
+
+    @RequestMapping(&quot;/deleteTel/{id}&quot;)
+    public String telefonoDelete(@PathVariable(name = &quot;id&quot;) String id) {
+<span class="nc" id="L170">        teldao.delete(id);</span>
+<span class="nc" id="L171">        userDao.newLog(&quot;Telefono eliminado Codigo:  &quot; + id, this.user.getUsuarioid(), &quot;TELEFONOS&quot;);</span>
+<span class="nc" id="L172">        return &quot;redirect:/telefonos&quot;;       </span>
+    }
+
+    @RequestMapping(value = &quot;/addCarrito/{id}/{pagina}&quot;, method = RequestMethod.POST)
+    public String addCarrito(@PathVariable(name = &quot;id&quot;) String id, @PathVariable(name = &quot;pagina&quot;) int pagina, @RequestParam String cantidadTel, @RequestParam String estado) {
+<span class="nc" id="L177">        Telefono telefono = teldao.get(id);</span>
+<span class="nc" id="L178">        int cant = Integer.parseInt(cantidadTel);</span>
+<span class="nc" id="L179">        this.carrito.addPedido(cant, telefono, estado);</span>
+<span class="nc bnc" id="L180" title="All 4 branches missed.">        switch(pagina){</span>
+            case 0:
+<span class="nc" id="L182">            return &quot;redirect:/telefonos&quot;;  </span>
+
+            case 1:
+<span class="nc" id="L185">            return &quot;redirect:/editTel&quot; + id;  </span>
+
+            case 2:
+<span class="nc" id="L188">            return &quot;redirect:/verTel/&quot; + id;  </span>
+
+            default:
+<span class="nc" id="L191">            return &quot;redirect:/telefonos&quot;;  </span>
+        }     
+    }
+
+    //FABRICA--------------------------------------------------------------------------------------------
+    @RequestMapping(&quot;/fabricas&quot;)
+    public String fabricasPage(final Model model) {
+<span class="nc" id="L198">        final List&lt;Fabricante&gt; listFab = fabDao.list();</span>
+<span class="nc" id="L199">        model.addAttribute(&quot;listFab&quot;, listFab);</span>
+<span class="nc" id="L200">        model.addAttribute(&quot;usuario&quot;, this.user);</span>
+<span class="nc" id="L201">        return &quot;fabricas/fabricas.html&quot;;</span>
+    }
+
+    @RequestMapping(&quot;/newFabrica&quot;)
+    public String fabricaNew(Model model) {
+<span class="nc" id="L206">        Fabricante nuevo = new Fabricante();</span>
+<span class="nc" id="L207">        model.addAttribute(&quot;nuevo&quot;, nuevo);</span>
+<span class="nc" id="L208">        model.addAttribute(&quot;usuario&quot;, this.user);</span>
+<span class="nc" id="L209">        return &quot;fabricas/fabricasNew.html&quot;;</span>
+    }
+    
+    @RequestMapping(value = &quot;/saveFabrica&quot;, method = RequestMethod.POST)
+    public String fabricaSave(@ModelAttribute(&quot;modelo&quot;) Fabricante modelo) {
+<span class="nc" id="L214">    fabDao.save(modelo);</span>
+<span class="nc" id="L215">    userDao.newLog(&quot;Nueva fabrica &quot; + modelo.getFabrica(), this.user.getUsuarioid(), &quot;FABRICANTES&quot;);</span>
+<span class="nc" id="L216">    return &quot;redirect:/fabricas&quot;;</span>
+    }
+
+    @RequestMapping(&quot;/editFabrica/{id}&quot;)
+    public ModelAndView fabricaEdit(@PathVariable(name = &quot;id&quot;) int id) {
+<span class="nc" id="L221">        ModelAndView mav = new ModelAndView(&quot;fabricas/fabricasUpdate.html&quot;);</span>
+<span class="nc" id="L222">        Fabricante modelo = fabDao.get(id);</span>
+<span class="nc" id="L223">        mav.addObject(&quot;modelo&quot;, modelo);</span>
+<span class="nc" id="L224">        mav.addObject(&quot;usuario&quot;, this.user);</span>
+<span class="nc" id="L225">        return mav;</span>
+    }
+        
+    @RequestMapping(value = &quot;/updateFabrica&quot;, method = RequestMethod.POST)
+    public String fabricaUpdate(@ModelAttribute(&quot;modelo&quot;) Fabricante modelo) {
+<span class="nc" id="L230">        fabDao.update(modelo);</span>
+<span class="nc" id="L231">        userDao.newLog(&quot;Fabrica editada &quot; + modelo.getFabrica(), this.user.getUsuarioid(), &quot;FABRICANTES&quot;);</span>
+<span class="nc" id="L232">        return &quot;redirect:/fabricas&quot;;</span>
+    }
+
+    @RequestMapping(&quot;/deleteFabrica/{id}&quot;)
+    public String fabricaDelete(@PathVariable(name = &quot;id&quot;) int id) {
+<span class="nc" id="L237">        fabDao.delete(id);</span>
+<span class="nc" id="L238">        userDao.newLog(&quot;Fabrica eliminada ID:  &quot; + id, this.user.getUsuarioid(), &quot;FABRICANTES&quot;);</span>
+<span class="nc" id="L239">        return &quot;redirect:/fabricas&quot;;       </span>
+    }
+
+    //CARRITO------------------------------------------------------------------------------------------
+    @RequestMapping(&quot;/carrito&quot;)
+    public String carritoPage(final Model carrito) {
+<span class="nc" id="L245">        carrito.addAttribute(&quot;usuario&quot;, this.user);</span>
+<span class="nc" id="L246">        carrito.addAttribute(&quot;carrito&quot;, this.carrito);</span>
+<span class="nc" id="L247">        carrito.addAttribute(&quot;cliente&quot;, this.cliente);</span>
+<span class="nc" id="L248">        carrito.addAttribute(&quot;msg&quot;, this.msg);</span>
+<span class="nc" id="L249">        carrito.addAttribute(&quot;msgCarrito&quot;, this.msgCarrito);</span>
+<span class="nc bnc" id="L250" title="All 2 branches missed.">        if(this.carrito.getClient().getNit() != 0 ){</span>
+<span class="nc" id="L251">            List&lt;Compra&gt; pendiente = pedidoDao.getPendiente(this.carrito.getClient().getNit());</span>
+<span class="nc" id="L252">            carrito.addAttribute(&quot;pendientes&quot;, pendiente);</span>
+<span class="nc" id="L253">        }else{</span>
+<span class="nc" id="L254">            List&lt;Compra&gt; pendiente = new ArrayList&lt;Compra&gt;();</span>
+<span class="nc" id="L255">            carrito.addAttribute(&quot;pendientes&quot;, pendiente);</span>
+        }
+<span class="nc" id="L257">        this.msg = &quot;&quot;;</span>
+<span class="nc" id="L258">        this.msgCarrito = &quot;&quot;;</span>
+<span class="nc" id="L259">        return &quot;pedidos/carrito.html&quot;;</span>
+    }
+
+    @RequestMapping(&quot;/entregar/{id}&quot;)
+    public String entregarPendiente(@PathVariable(name = &quot;id&quot;) int id) {
+<span class="nc" id="L264">        pedidoDao.entregar(id);</span>
+<span class="nc" id="L265">        return &quot;redirect:/carrito&quot;;</span>
+    }
+
+    @RequestMapping(&quot;/deleteCarrito/{id}/{estado}&quot;)
+    public String carritoDel(@PathVariable(name = &quot;id&quot;) String id, @PathVariable(name = &quot;estado&quot;) String estado) {
+<span class="nc" id="L270">        carrito.deletePedido(id, estado);</span>
+<span class="nc" id="L271">        return &quot;redirect:/carrito&quot;;</span>
+    }
+
+    @RequestMapping(value = &quot;/carritoCliente&quot;, method = RequestMethod.POST)
+    public String carritoClientePage(@RequestParam String nitCliente) {
+<span class="nc bnc" id="L276" title="All 2 branches missed.">        if(!nitCliente.equals(&quot;&quot;)){</span>
+<span class="nc" id="L277">            ModeloCliente clienteOrden = daoc.get(Integer.parseInt(nitCliente));</span>
+<span class="nc" id="L278">            this.cliente = new ModeloCliente();</span>
+<span class="nc" id="L279">            this.existeCliente = false;</span>
+<span class="nc bnc" id="L280" title="All 2 branches missed.">            if(clienteOrden != null){</span>
+<span class="nc" id="L281">                this.cliente = clienteOrden;</span>
+<span class="nc" id="L282">                this.carrito.setClient(clienteOrden);</span>
+<span class="nc" id="L283">                this.existeCliente = true;</span>
+            }else{
+<span class="nc" id="L285">                this.cliente = new ModeloCliente();</span>
+<span class="nc" id="L286">                this.carrito.setClient(cliente);</span>
+<span class="nc" id="L287">                this.msg = &quot;No existe el cliente&quot;;</span>
+            }
+        }
+<span class="nc" id="L290">        return &quot;redirect:/carrito&quot;;</span>
+    }
+
+    @RequestMapping(&quot;/ordenar&quot;)
+    public String ordenarCarrito() {
+<span class="nc bnc" id="L295" title="All 2 branches missed.">        if(this.cliente.getTipoclienteid() != 1){</span>
+<span class="nc bnc" id="L296" title="All 2 branches missed.">            for(Pedido element : this.carrito.getCarro()){</span>
+<span class="nc" id="L297">                Compra verificar = pedidoDao.comprobar(element.getTelefono().getTelcodigo(), element.getCantidad());</span>
+<span class="nc" id="L298">                System.out.println(element.getCantidad());</span>
+<span class="nc bnc" id="L299" title="All 2 branches missed.">                if(verificar.getCantidad() == 0){</span>
+<span class="nc" id="L300">                    this.msgCarrito = &quot;El teléfono Codigo &quot; + element.getTelefono().getTelcodigo() + &quot; no cuenta con unidades suficientes&quot;;</span>
+<span class="nc" id="L301">                    return &quot;redirect:/carrito&quot;;</span>
+                }
+<span class="nc" id="L303">            }</span>
+        }
+<span class="nc" id="L305">        Orden orden = new Orden(this.cliente.getNit(), this.carrito);</span>
+<span class="nc" id="L306">        pedidoDao.generarOrden(orden);</span>
+<span class="nc" id="L307">        Orden lastOrden = pedidoDao.getLast(this.cliente.getNit());</span>
+<span class="nc" id="L308">        this.carrito.terminar(lastOrden.getOrdenid());</span>
+<span class="nc" id="L309">        userDao.newLog(&quot;Nueva orden No:  &quot; + lastOrden.getOrdenid(), this.user.getUsuarioid(), &quot;ORDENES&quot;);</span>
+<span class="nc bnc" id="L310" title="All 2 branches missed.">        for(Pedido element : this.carrito.getCarro()){</span>
+<span class="nc bnc" id="L311" title="All 2 branches missed.">            if(element.getEstado().equals(&quot;credito&quot;)){</span>
+<span class="nc bnc" id="L312" title="All 2 branches missed.">                if(this.cliente.getTipoclienteid() == 1){</span>
+<span class="nc" id="L313">                    pedidoDao.savePedido(element);</span>
+<span class="nc" id="L314">                    userDao.newLog(&quot;Nueva compra para orden No:  &quot; + element.getOrdenid(), this.user.getUsuarioid(), &quot;COMPRAS&quot;);</span>
+                }
+            }else{
+<span class="nc" id="L317">                pedidoDao.savePedido(element);</span>
+<span class="nc" id="L318">                userDao.newLog(&quot;Nueva compra para orden No:  &quot; + element.getOrdenid(), this.user.getUsuarioid(), &quot;COMPRAS&quot;);</span>
+            }
+            
+<span class="nc" id="L321">        }</span>
+<span class="nc" id="L322">        this.carrito = new Carrito();</span>
+<span class="nc" id="L323">        this.cliente = new ModeloCliente();</span>
+<span class="nc" id="L324">        this.existeCliente = false;</span>
+<span class="nc" id="L325">        return &quot;redirect:/carrito&quot;;</span>
+    }
+
+
+    //PEDIDOS-----------------------------------------------------------------------------
+    
+    @RequestMapping(&quot;/pedidos&quot;)
+    public String pedidosPage(final Model model) {
+<span class="nc" id="L333">        final List&lt;Orden&gt; listOrden = pedidoDao.listOrden();</span>
+<span class="nc" id="L334">        model.addAttribute(&quot;listOrden&quot;, listOrden);</span>
+<span class="nc" id="L335">        model.addAttribute(&quot;usuario&quot;, this.user);</span>
+<span class="nc" id="L336">        return &quot;pedidos/pedidos.html&quot;;</span>
+    }
+
+    @RequestMapping(&quot;/verOrden/{id}&quot;)
+    public String detallesOrden(Model model, @PathVariable(name = &quot;id&quot;) String id) {
+<span class="nc" id="L341">        List&lt;Pedido&gt; listPedidos = pedidoDao.listPedido(id);</span>
+<span class="nc" id="L342">        Orden orden = pedidoDao.get(Integer.parseInt(id));</span>
+<span class="nc" id="L343">        ModeloCliente cli = daoc.get(orden.getNit());</span>
+<span class="nc" id="L344">        model.addAttribute(&quot;listPedidos&quot;, listPedidos);</span>
+<span class="nc" id="L345">        model.addAttribute(&quot;orden&quot;, orden);</span>
+<span class="nc" id="L346">        model.addAttribute(&quot;cliente&quot;, cli);</span>
+<span class="nc" id="L347">        model.addAttribute(&quot;usuario&quot;, this.user);</span>
+<span class="nc" id="L348">        return &quot;pedidos/pedidosDetalle.html&quot;;</span>
+    }
+
+    //CLIENTES-----------------------------------------------------------------------------------------
+    @RequestMapping(&quot;/sendMail&quot;)
+    public String sendMail(){
+
+<span class="nc" id="L355">        Month mes = LocalDate.now().getMonth();</span>
+<span class="nc" id="L356">        String nombre = mes.getDisplayName(TextStyle.FULL, new Locale(&quot;es&quot;, &quot;ES&quot;));</span>
+
+<span class="nc" id="L358">        List&lt;ModeloCliente&gt; clientes = daoc.list();</span>
+
+<span class="nc bnc" id="L360" title="All 2 branches missed.">        for(ModeloCliente clienteInd : clientes){</span>
+<span class="nc" id="L361">            String header = &quot;Hola &quot; + clienteInd.getNombre() + &quot;\nEstas son tus compras del mes de &quot; + nombre.toUpperCase() + &quot;\n\n&quot;;</span>
+<span class="nc" id="L362">            String message = header;</span>
+<span class="nc" id="L363">            List&lt;Compra&gt; compras = pedidoDao.getListByClient(clienteInd.getNit());</span>
+<span class="nc bnc" id="L364" title="All 2 branches missed.">            for(Compra compra : compras){</span>
+<span class="nc" id="L365">                message = message + compra.toString();</span>
+<span class="nc" id="L366">            }</span>
+
+<span class="nc" id="L368">            message = message + &quot;\n\nSaludos desde la tienda de &quot; + this.tiendaActual;</span>
+
+<span class="nc" id="L370">            mailService.sendMail(clienteInd.getEmail(), nombre.toUpperCase(), message);</span>
+<span class="nc" id="L371">        }</span>
+        
+
+<span class="nc" id="L374">        return &quot;redirect:/clientes&quot;;</span>
+    }
+
+    @RequestMapping(&quot;/clientes&quot;)
+    public String clientesPage(final Model model) {
+<span class="nc" id="L379">        final List&lt;ModeloCliente&gt; listClient = daoc.list();</span>
+<span class="nc" id="L380">        model.addAttribute(&quot;listClient&quot;, listClient);</span>
+<span class="nc" id="L381">        model.addAttribute(&quot;usuario&quot;, this.user);</span>
+<span class="nc" id="L382">        return &quot;clientes/ClienteRead.html&quot;;</span>
+    }
+
+    @RequestMapping(&quot;/newCliente&quot;)
+    public String clienteNew(Model model) {
+<span class="nc" id="L387">        ModeloCliente nuevoClient = new ModeloCliente();</span>
+<span class="nc" id="L388">        model.addAttribute(&quot;nuevoClient&quot;, nuevoClient);</span>
+<span class="nc" id="L389">        List&lt;ModeloCliente&gt; listTipos = daoc.listTipo();</span>
+<span class="nc" id="L390">        model.addAttribute(&quot;listTipos&quot;, listTipos);</span>
+<span class="nc" id="L391">        model.addAttribute(&quot;usuario&quot;, this.user);</span>
+<span class="nc" id="L392">        return &quot;clientes/clientecreate.html&quot;;</span>
+    }
+
+    @RequestMapping(&quot;/deleteCliente/{nit}&quot;)
+    public String deleteCliente(@PathVariable(name = &quot;nit&quot;) int nit) {
+<span class="nc" id="L397">        daoc.delete(nit);</span>
+<span class="nc" id="L398">        userDao.newLog(&quot;Cliente eliminado nit:  &quot; + nit, this.user.getUsuarioid(), &quot;CLIENTES&quot;);</span>
+<span class="nc" id="L399">        return &quot;redirect:/clientes&quot;;       </span>
+    }
+
+    @RequestMapping(value = &quot;/savec&quot;, method = RequestMethod.POST)
+        public String save(@ModelAttribute(&quot;nuevoClient&quot;) ModeloCliente nuevoClient) {
+<span class="nc" id="L404">        daoc.save(nuevoClient);</span>
+<span class="nc" id="L405">        userDao.newLog(&quot;Nuevo cliente Nit:  &quot; + nuevoClient.getNit(), this.user.getUsuarioid(), &quot;CLIENTES&quot;);</span>
+<span class="nc" id="L406">        return &quot;redirect:/clientes&quot;;</span>
+    }
+
+    @RequestMapping(&quot;/editCliente/{nit}&quot;)
+    public ModelAndView clienteEdit(@PathVariable(name = &quot;nit&quot;) int nit) {
+<span class="nc" id="L411">        ModelAndView mav = new ModelAndView(&quot;clientes/clienteupdate.html&quot;);</span>
+<span class="nc" id="L412">        ModeloCliente modelo = daoc.get(nit);</span>
+<span class="nc" id="L413">        List&lt;ModeloCliente&gt; listTipos = daoc.listTipo();</span>
+<span class="nc" id="L414">        mav.addObject(&quot;modelo&quot;, modelo);</span>
+<span class="nc" id="L415">        mav.addObject(&quot;listTipos&quot;, listTipos);</span>
+<span class="nc" id="L416">        mav.addObject(&quot;usuario&quot;, this.user);</span>
+<span class="nc" id="L417">        return mav;</span>
+    }
+    
+    @RequestMapping(value = &quot;/updatec&quot;, method = RequestMethod.POST)
+    public String clienteUpdate(@ModelAttribute(&quot;modelo&quot;) ModeloCliente modelo, @RequestParam String fechaVen) {
+<span class="nc" id="L422">        modelo.setVencimiento(fechaVen);</span>
+<span class="nc" id="L423">        daoc.update(modelo);</span>
+<span class="nc" id="L424">        userDao.newLog(&quot;Cliente modificado Nit:  &quot; + modelo.getNit(), this.user.getUsuarioid(), &quot;CLIENTES&quot;);</span>
+<span class="nc" id="L425">        return &quot;redirect:/clientes&quot;;</span>
+    }
+
+    //USUARIOS---------------------------------------------------------------------------------------------------------------------
+    @RequestMapping(&quot;/&quot;)
+    public String viewLogIn(final Model model) {
+<span class="nc bnc" id="L431" title="All 2 branches missed.">        if(this.login){</span>
+<span class="nc" id="L432">            List&lt;Acciones&gt; acciones = userDao.listAccion();</span>
+<span class="nc" id="L433">            List&lt;Vista&gt; vistaTel = vistaDao.listVentatel();</span>
+<span class="nc" id="L434">            List&lt;Vista&gt; vistaMes = vistaDao.listVentames();</span>
+<span class="nc" id="L435">            List&lt;Vista&gt; ganancias = vistaDao.listGananciames();</span>
+<span class="nc" id="L436">            model.addAttribute(&quot;ganancias&quot;, ganancias);</span>
+<span class="nc" id="L437">            model.addAttribute(&quot;ventaTel&quot;, vistaTel);</span>
+<span class="nc" id="L438">            model.addAttribute(&quot;ventaMes&quot;, vistaMes);</span>
+<span class="nc" id="L439">            model.addAttribute(&quot;usuario&quot;, this.user);</span>
+<span class="nc" id="L440">            model.addAttribute(&quot;acciones&quot;, acciones);</span>
+<span class="nc" id="L441">            return &quot;home.html&quot;;</span>
+        }else{
+<span class="nc" id="L443">            model.addAttribute(&quot;msg&quot;, this.msg);</span>
+<span class="nc" id="L444">            return &quot;index.html&quot;;</span>
+        }
+    }
+
+    @RequestMapping(value = &quot;/comprobar&quot;, method = RequestMethod.POST)
+    public String comprobarUsuario(@RequestParam String name, @RequestParam String pass) {
+<span class="nc" id="L450">        Usuario usuario = userDao.logIn(name, pass);</span>
+<span class="nc bnc" id="L451" title="All 2 branches missed.">        if(usuario != null){</span>
+<span class="nc" id="L452">            this.msg =&quot;&quot;;</span>
+<span class="nc" id="L453">            this.user = usuario;</span>
+<span class="nc" id="L454">            this.login = true;</span>
+<span class="nc" id="L455">            userDao.newLog(&quot;Inicio de sesion&quot;, usuario.getUsuarioid(), &quot;USERS&quot;);</span>
+        }else{
+<span class="nc" id="L457">            this.msg =&quot;Nombre o password incorrecto&quot;;</span>
+        }
+<span class="nc" id="L459">        return &quot;redirect:/&quot;;</span>
+    }
+
+    @RequestMapping(&quot;/logout&quot;)
+    public String logOutUser() {
+<span class="nc" id="L464">        this.login = false;</span>
+<span class="nc" id="L465">        userDao.newLog(&quot;Cierre de sesion&quot;, this.user.getUsuarioid(), &quot;USERS&quot;);</span>
+<span class="nc" id="L466">        return &quot;redirect:/&quot;;</span>
+    }
+
+    @RequestMapping(&quot;/usuarios&quot;)
+    public String usuariosPage(final Model model) {
+<span class="nc" id="L471">        final List&lt;Usuario&gt; listUsuario = userDao.list();</span>
+<span class="nc" id="L472">        model.addAttribute(&quot;listUsuario&quot;, listUsuario);</span>
+<span class="nc" id="L473">        model.addAttribute(&quot;usuario&quot;, this.user);</span>
+<span class="nc" id="L474">        return &quot;usuarios/usuarios.html&quot;;</span>
+    }
+
+    @RequestMapping(&quot;/newUsuario&quot;)
+    public String usuarioNew(Model model) {
+<span class="nc" id="L479">        Usuario nuevo = new Usuario();</span>
+<span class="nc" id="L480">        List&lt;Usuario&gt; roles = userDao.listRol();</span>
+<span class="nc" id="L481">        model.addAttribute(&quot;nuevo&quot;, nuevo);</span>
+<span class="nc" id="L482">        model.addAttribute(&quot;roles&quot;, roles);</span>
+<span class="nc" id="L483">        model.addAttribute(&quot;usuario&quot;, this.user);</span>
+<span class="nc" id="L484">        return &quot;usuarios/usuariosNew.html&quot;;</span>
+    }
+    
+    @RequestMapping(value = &quot;/saveUsuario&quot;, method = RequestMethod.POST)
+    public String usuariosave(@ModelAttribute(&quot;modelo&quot;) Usuario modelo) {
+<span class="nc" id="L489">    userDao.save(modelo);</span>
+<span class="nc" id="L490">    userDao.newLog(&quot;Nuevo usuario: &quot; + modelo.getNombre(), this.user.getUsuarioid(), &quot;USERS&quot;);</span>
+<span class="nc" id="L491">    return &quot;redirect:/usuarios&quot;;</span>
+    }
+
+    @RequestMapping(&quot;/editUsuario/{id}&quot;)
+    public ModelAndView usuarioEdit(@PathVariable(name = &quot;id&quot;) int id) {
+<span class="nc" id="L496">        ModelAndView mav = new ModelAndView(&quot;usuarios/usuariosUpdate.html&quot;);</span>
+<span class="nc" id="L497">        Usuario modelo = userDao.get(id);</span>
+<span class="nc" id="L498">        List&lt;Usuario&gt; roles = userDao.listRol();</span>
+<span class="nc" id="L499">        mav.addObject(&quot;modelo&quot;, modelo);</span>
+<span class="nc" id="L500">        mav.addObject(&quot;roles&quot;, roles);</span>
+<span class="nc" id="L501">        mav.addObject(&quot;usuario&quot;, this.user);</span>
+<span class="nc" id="L502">        return mav;</span>
+    }
+        
+    @RequestMapping(value = &quot;/updateUsuario&quot;, method = RequestMethod.POST)
+    public String usuarioUpdate(@ModelAttribute(&quot;modelo&quot;) Usuario modelo) {
+<span class="nc" id="L507">        userDao.update(modelo);</span>
+<span class="nc" id="L508">        userDao.newLog(&quot;Usuario modificado: &quot; + modelo.getNombre(), this.user.getUsuarioid(), &quot;USERS&quot;);</span>
+<span class="nc" id="L509">        return &quot;redirect:/usuarios&quot;;</span>
+    }
+
+    @RequestMapping(&quot;/deleteUsuario/{id}&quot;)
+    public String usuarioDelete(@PathVariable(name = &quot;id&quot;) int id) {
+<span class="nc" id="L514">        userDao.delete(id);</span>
+<span class="nc" id="L515">        userDao.newLog(&quot;Usuario borado ID: &quot; + id, this.user.getUsuarioid(), &quot;USERS&quot;);</span>
+<span class="nc" id="L516">        return &quot;redirect:/usuarios&quot;;       </span>
+    }
+
+    //REST--------------------------------------------------------
+    @RequestMapping(value = &quot;/test&quot;)
+	public String getDispo(final Model model){
+        /*String uri = &quot;http://localhost:3001/test&quot;;
+        RestTemplate restTemplate = new RestTemplate();
+
+        ResponseEntity&lt;Fabricante[]&gt; response = restTemplate.getForEntity(uri,Fabricante[].class);
+        Fabricante[] employees = response.getBody();	  
+        model.addAttribute(&quot;listTest&quot;, employees);  
+            return &quot;test.html&quot;;*/
+<span class="nc" id="L529">            String url = &quot;http://localhost:3001/post&quot;;</span>
+
+// create an instance of RestTemplate
+<span class="nc" id="L532">RestTemplate restTemplate = new RestTemplate();</span>
+
+// create a post object
+<span class="nc" id="L535">Fabricante post = new Fabricante(101, &quot;testfinal&quot;, 8080,</span>
+                &quot;A powerful tool for building web apps.&quot;);
+
+// send POST request
+<span class="nc" id="L539">restTemplate.postForEntity(url, post, Void.class);</span>
+
+
+<span class="nc" id="L542">return &quot;redirect:/&quot;;</span>
+	}
+
+    @RequestMapping(value = &quot;/restTel&quot;,method = RequestMethod.GET)
+    public String restTelPage(final Model model) {
+<span class="nc" id="L547">        List&lt;Telefono&gt; telefonos = new ArrayList&lt;Telefono&gt;();</span>
+<span class="nc" id="L548">        List&lt;Fabricante&gt; fabricas = fabDao.listDisponibles();</span>
+<span class="nc bnc" id="L549" title="All 2 branches missed.">        for(Fabricante fab : fabricas){</span>
+            try {
+<span class="nc" id="L551">                String uri = fab.generateUrl() + &quot;restTelefonos/&quot; + tiendaActual + &quot;/&quot;+ contr;</span>
+<span class="nc" id="L552">                RestTemplate restTemplate = new RestTemplate();</span>
+<span class="nc" id="L553">                ResponseEntity&lt;Telefono[]&gt; response = restTemplate.getForEntity(uri,Telefono[].class);</span>
+<span class="nc" id="L554">                Telefono[] tel = response.getBody();</span>
+<span class="nc" id="L555">                telefonos.addAll(Arrays.asList(tel));</span>
+<span class="nc" id="L556">              } catch (Exception e) {</span>
+<span class="nc" id="L557">                this.msg = fab.getFabrica() + &quot;, &quot;;</span>
+<span class="nc" id="L558">              }</span>
+<span class="nc" id="L559">        }</span>
+<span class="nc bnc" id="L560" title="All 2 branches missed.">        if(!this.msg.equals(&quot;&quot;)){</span>
+<span class="nc" id="L561">            this.msg = &quot;Fabricas no conectadas: &quot; + this.msg;</span>
+        }
+<span class="nc" id="L563">        model.addAttribute(&quot;msg&quot;, this.msg);</span>
+<span class="nc" id="L564">        model.addAttribute(&quot;listTel&quot;, telefonos);  </span>
+<span class="nc" id="L565">        model.addAttribute(&quot;usuario&quot;, this.user);</span>
+<span class="nc" id="L566">        this.msg = &quot;&quot;;</span>
+<span class="nc" id="L567">        return &quot;telefonos/telefonosFabrica.html&quot;;</span>
+    }
+
+    @RequestMapping(&quot;/saveRestTel/{codigo}/{fabrica}&quot;)
+    public String saveRestTel(@PathVariable(name = &quot;codigo&quot;) String codigo, @PathVariable(name = &quot;fabrica&quot;) String fabrica) {
+<span class="nc" id="L572">        Fabricante fabricante = fabDao.getByName(fabrica);</span>
+<span class="nc" id="L573">        String uri = fabricante.generateUrl() + &quot;oneTel/&quot; + codigo + &quot;/&quot; + tiendaActual + &quot;/&quot;+ contr;</span>
+<span class="nc" id="L574">            RestTemplate restTemplate = new RestTemplate();</span>
+<span class="nc" id="L575">            ResponseEntity&lt;Telefono[]&gt; response = restTemplate.getForEntity(uri,Telefono[].class);</span>
+<span class="nc" id="L576">            Telefono[] tel = response.getBody();</span>
+<span class="nc" id="L577">            Telefono guardar = tel[0];</span>
+<span class="nc" id="L578">            guardar.setFabricaid(fabricante.getFabricaid());</span>
+<span class="nc" id="L579">            teldao.save(guardar);</span>
+<span class="nc bnc" id="L580" title="All 2 branches missed.">            for(String foto : guardar.getImagenes()){</span>
+<span class="nc" id="L581">                Telefono te = new Telefono(guardar.getTelcodigo(), foto);</span>
+<span class="nc" id="L582">                teldao.saveFoto(te);</span>
+            }
+<span class="nc" id="L584">        return &quot;redirect:/telefonos&quot;;       </span>
+    }
+
+    @RequestMapping(&quot;/restPedidos&quot;)
+    public String restPedidosPage(final Model model) {
+<span class="nc" id="L589">        List&lt;Pedido&gt; orden = new ArrayList&lt;Pedido&gt;();</span>
+<span class="nc" id="L590">        List&lt;Fabricante&gt; fabricas = fabDao.listDisponibles();</span>
+<span class="nc bnc" id="L591" title="All 2 branches missed.">        for(Fabricante fab : fabricas){</span>
+            try{
+<span class="nc" id="L593">            String uri = fab.generateUrl() + &quot;restOrdenes/&quot; + tiendaActual + &quot;/&quot;+ contr;</span>
+<span class="nc" id="L594">            RestTemplate restTemplate = new RestTemplate();</span>
+<span class="nc" id="L595">            ResponseEntity&lt;Pedido[]&gt; response = restTemplate.getForEntity(uri,Pedido[].class);</span>
+<span class="nc" id="L596">            Pedido[] ord = response.getBody();</span>
+<span class="nc" id="L597">            orden.addAll(Arrays.asList(ord));</span>
+<span class="nc" id="L598">            } catch (Exception e) {</span>
+<span class="nc" id="L599">            this.msg = fab.getFabrica() + &quot;, &quot;;</span>
+<span class="nc" id="L600">            }</span>
+            
+<span class="nc" id="L602">        }</span>
+<span class="nc bnc" id="L603" title="All 2 branches missed.">        if(!this.msg.equals(&quot;&quot;)){</span>
+<span class="nc" id="L604">            this.msg = &quot;Fabricas no conectadas: &quot; + this.msg;</span>
+        }
+<span class="nc" id="L606">        model.addAttribute(&quot;listOrden&quot;, orden);</span>
+<span class="nc" id="L607">        model.addAttribute(&quot;usuario&quot;, this.user);</span>
+<span class="nc" id="L608">        model.addAttribute(&quot;msg&quot;, this.msg);</span>
+<span class="nc" id="L609">        this.msg = &quot;&quot;;</span>
+<span class="nc" id="L610">        return &quot;pedidos/pedidosFabrica.html&quot;;</span>
+    }
+
+    @RequestMapping(value = &quot;/restNewPedido/{idTel}/{pagina}&quot;, method = RequestMethod.POST)
+    public String restAddPedido(@PathVariable(name = &quot;idTel&quot;) String idTel, 
+                                        @PathVariable(name = &quot;pagina&quot;) int pagina,
+                                        @RequestParam int cantidadTel) {
+<span class="nc" id="L617">        Telefono telefono = teldao.get(idTel);</span>
+<span class="nc" id="L618">        Fabricante fabric = fabDao.get(telefono.getFabricaid());</span>
+<span class="nc" id="L619">        Pedido element = new Pedido(cantidadTel, telefono);</span>
+<span class="nc" id="L620">        RestTemplate restTemplate = new RestTemplate();</span>
+        try{
+<span class="nc" id="L622">            ResponseEntity&lt;Void&gt; response = restTemplate.postForEntity(fabric.generateUrl() + &quot;restAddPedido/&quot; + tiendaActual + &quot;/&quot;+ contr, element, Void.class);</span>
+<span class="nc bnc" id="L623" title="All 2 branches missed.">            if (response.getStatusCode() == HttpStatus.CREATED) {</span>
+<span class="nc" id="L624">                this.msg = &quot;Pedido aceptado&quot;;</span>
+            } else {
+<span class="nc" id="L626">                System.out.println(&quot;Request Failed&quot;);</span>
+            }
+
+<span class="nc" id="L629">        } catch (Exception e) {</span>
+<span class="nc" id="L630">            this.msg = &quot;Fabrica no conectada&quot;;</span>
+<span class="nc bnc" id="L631" title="All 2 branches missed.">            if(pagina == 1){</span>
+                
+<span class="nc" id="L633">                return &quot;redirect:/editTel/&quot; + idTel;</span>
+            }else{
+<span class="nc" id="L635">                return &quot;redirect:/verTel/&quot; + idTel;</span>
+            }
+<span class="nc" id="L637">        }</span>
+        
+<span class="nc" id="L639">        return &quot;redirect:/restPedidos&quot;;</span>
+    }
+
+    @RequestMapping(&quot;/restAccion/{id}/{fabrica}/{accion}/{cantidad}/{tel}&quot;)
+    public String restPedidoAceptarPage(@PathVariable(name = &quot;id&quot;) String id, 
+                                        @PathVariable(name = &quot;fabrica&quot;) String fabrica, 
+                                        @PathVariable(name = &quot;accion&quot;) int accion, 
+                                        @PathVariable(name = &quot;cantidad&quot;) int cant,
+                                        @PathVariable(name = &quot;tel&quot;) String tel) {
+<span class="nc" id="L648">        Fabricante fabric = fabDao.getByName(fabrica);</span>
+<span class="nc" id="L649">        RestTemplate restTemplate = new RestTemplate();</span>
+<span class="nc" id="L650">		Map&lt;String, String&gt; map = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L651">		map.put(&quot;id&quot;, id);</span>
+<span class="nc bnc" id="L652" title="All 2 branches missed.">		if(accion == 1){</span>
+<span class="nc" id="L653">		    map.put(&quot;estado&quot;, &quot;Recibido&quot;);</span>
+        }else{
+<span class="nc" id="L655">            map.put(&quot;estado&quot;, &quot;Cancelado&quot;);</span>
+        }
+<span class="nc" id="L657">		ResponseEntity&lt;Void&gt; response = restTemplate.postForEntity(fabric.generateUrl() + &quot;restActualizarPedido/&quot; + tiendaActual + &quot;/&quot;+ contr, map, Void.class);</span>
+
+<span class="nc bnc" id="L659" title="All 2 branches missed.">        if (response.getStatusCode() == HttpStatus.CREATED) {</span>
+<span class="nc bnc" id="L660" title="All 2 branches missed.">            if(accion == 1){</span>
+<span class="nc" id="L661">                teldao.actualizarInventario(cant, tel);</span>
+            }
+		} else {
+<span class="nc" id="L664">			System.out.println(&quot;Request Failed&quot;);</span>
+		}
+
+<span class="nc" id="L667">        return &quot;redirect:/restPedidos&quot;;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

@@ -15,7 +15,14 @@
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>1.8</java.version>
-		<sonar.coverage.jacoco.xmlReportPaths>../app-it/target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+		<sonar.language>java</sonar.language>
+    <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
+    <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
+       <sonar.coverage.jacoco.xmlReportPaths>${project.build.directory}/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+    <sonar.jacoco.reportsPaths>${project.build.directory}/jacoco-ut.exec</sonar.jacoco.reportsPaths>
+    <sonar.tests>src/test/java</sonar.tests>
+    <sonar.projectKey>sonar-test</sonar.projectKey>
+    <sonar.host.url>http://172.21.0.3:9000</sonar.host.url>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -70,6 +77,79 @@
 					<source>1.8</source>
 					<target>1.8</target>
 				</configuration>
+			</plugin>
+			<!--
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.1</version>
+				<executions>
+					<execution>
+						<id>default-prepare-agent</id>
+						<goals>
+								<goal>prepare-agent</goal>
+						</goals>
+						<configuration>
+								<destFile>${project.build.directory}/jacoco-ut.exec</destFile>
+						</configuration>
+					</execution>
+					<execution>
+						<id>default-report</id>
+						<goals>
+								<goal>report</goal>
+						</goals>
+						<configuration>
+								<dataFile>${project.build.directory}/jacoco-ut.exec</dataFile>
+								<outputEncoding>UTF-8</outputEncoding>
+								<outputDirectory>${project.build.directory}</outputDirectory>
+						</configuration>
+					</execution>
+					<execution>
+						<id>default-check</id>
+						<goals>
+								<goal>check</goal>
+						</goals>
+						<configuration>
+								<dataFile>${project.build.directory}/jacoco-ut.exec</dataFile>
+								<rules>
+										<rule>
+										<element>BUNDLE</element>
+												<limits>
+														<limit>
+																<counter>INSTRUCTION</counter>
+																<value>COVEREDRATIO</value>
+																<minimum>0.80</minimum>
+														</limit>
+												</limits>
+										</rule>
+								</rules>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin> -->
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.5</version>
+				<executions>
+					<execution>
+						<id>prepare-agent</id>
+						<goals>
+						 <goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>report</id>
+						<goals>
+						 <goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.sonarsource.scanner.maven</groupId>
+				<artifactId>sonar-maven-plugin</artifactId>
+				<version>3.7.0.1746</version>
 			</plugin>
 		</plugins>
 		
