@@ -142,7 +142,7 @@ public class Controlador {
 
     @RequestMapping(value = "/saveFoto", method = RequestMethod.POST)
     public String fotoSave(@RequestParam String idtel, @ModelAttribute("fotoVacia") Telefono fotoVacia) {
-        if(fotoVacia.getFoto() != ""){
+        if(!fotoVacia.getFoto().equals("")){
             fotoVacia.setTelcodigo(idtel);
             teldao.saveFoto(fotoVacia);
         }

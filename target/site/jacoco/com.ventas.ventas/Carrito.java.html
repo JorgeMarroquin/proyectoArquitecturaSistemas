@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Carrito.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ventas</a> &gt; <a href="index.source.html" class="el_package">com.ventas.ventas</a> &gt; <span class="el_source">Carrito.java</span></div><h1>Carrito.java</h1><pre class="source lang-java linenums">package com.ventas.ventas;
+
+import java.text.DecimalFormat;
+import java.util.*;
+
+import com.ventas.ventas.pedidos.*;
+import com.ventas.ventas.telefonos.*;
+import com.ventas.ventas.clientes.*;
+
+/**
+ * Clase Carrito
+ *
+ * Contiene informacion de los pedidos
+ *
+ * @author Jorge
+ * @version 1.0
+ */
+<span class="fc" id="L18">public class Carrito {</span>
+<span class="fc" id="L19">    private DecimalFormat df = new DecimalFormat(&quot;#.00&quot;); </span>
+<span class="fc" id="L20">    private List&lt;Pedido&gt; carro = new ArrayList&lt;Pedido&gt;();</span>
+<span class="fc" id="L21">    private ModeloCliente client = new ModeloCliente();</span>
+   
+    
+    /** 
+     * Agrega un pedido a la lista
+     * @param cantidad
+     * @param telefono
+     * @param estado
+     */
+    public void addPedido(int cantidad, Telefono telefono, String estado){
+<span class="fc" id="L31">        Pedido pedido = this.find(telefono.getTelcodigo(), estado);</span>
+<span class="pc bpc" id="L32" title="3 of 4 branches missed.">        if(pedido != null &amp;&amp; estado.equals(pedido.getEstado())){</span>
+<span class="nc" id="L33">            int actual = pedido.getCantidad();</span>
+<span class="nc" id="L34">            pedido.setCantidad(actual + cantidad);</span>
+<span class="nc" id="L35">        }else{</span>
+<span class="fc" id="L36">            this.carro.add(new Pedido(cantidad, telefono, estado));</span>
+        } 
+<span class="fc" id="L38">    }</span>
+   
+    
+    /** 
+     * Elimina un pedido de la lista
+     * @param telcode
+     * @param estado
+     */
+    public void deletePedido(String telcode, String estado){
+<span class="fc" id="L47">        Pedido borrar = this.find(telcode, estado);</span>
+<span class="pc bpc" id="L48" title="1 of 2 branches missed.">        if(borrar != null){</span>
+<span class="fc" id="L49">            this.carro.remove(borrar);</span>
+        }
+<span class="fc" id="L51">    }</span>
+
+    
+    /** 
+     * Busca un pedido en la lista, sirve para eliminarlo o ver si está repetido
+     * @param telcode
+     * @param estado
+     * @return Pedido
+     */
+    public Pedido find(String telcode, String estado){
+<span class="fc bfc" id="L61" title="All 2 branches covered.">        for (Pedido element : this.carro){</span>
+<span class="fc bfc" id="L62" title="All 4 branches covered.">            if (element.getTelefono().getTelcodigo().equals(telcode) &amp;&amp; estado.equals(element.getEstado())){</span>
+                
+<span class="fc" id="L64">                return element;</span>
+            }
+<span class="fc" id="L66">        }</span>
+        
+<span class="fc" id="L68">        return null;</span>
+    }
+
+    
+    /** 
+     * Calcula la suma sin descuento
+     * @return float
+     */
+    public float subtotal(){
+<span class="fc" id="L77">        float resultado = 0;</span>
+<span class="fc bfc" id="L78" title="All 2 branches covered.">        for (Pedido element : this.carro){</span>
+<span class="fc" id="L79">            float pre = element.getCantidad() * element.getTelefono().getPrecioventa();</span>
+<span class="fc" id="L80">            resultado = resultado + pre;</span>
+<span class="fc" id="L81">        }</span>
+<span class="fc" id="L82">        resultado = Float.valueOf(df.format(resultado));</span>
+<span class="fc" id="L83">        return resultado;</span>
+    }
+
+    
+    /** 
+     * Calcula el descuento
+     * @return float
+     */
+    public float descuentoTotal(){
+<span class="fc" id="L92">        float resultado = 0;</span>
+<span class="fc bfc" id="L93" title="All 2 branches covered.">        for (Pedido element : this.carro){</span>
+<span class="fc" id="L94">            resultado = resultado + element.descuentoTotal(client.realdescuento());</span>
+<span class="fc" id="L95">        }</span>
+<span class="fc" id="L96">        resultado = Float.valueOf(df.format(resultado));</span>
+<span class="fc" id="L97">        return resultado;</span>
+    }
+
+    public float totales(){
+<span class="fc" id="L101">        float resultado = 0;</span>
+<span class="fc bfc" id="L102" title="All 2 branches covered.">        for (Pedido element : this.carro){</span>
+<span class="fc" id="L103">            resultado = resultado + element.totalPedido(client.realdescuento());</span>
+<span class="fc" id="L104">        }</span>
+<span class="fc" id="L105">        resultado = Float.valueOf(df.format(resultado));</span>
+<span class="fc" id="L106">        return resultado;</span>
+    }
+
+    public void terminar(int ordenid){
+<span class="fc bfc" id="L110" title="All 2 branches covered.">        for (Pedido element : this.carro){</span>
+<span class="fc" id="L111">            element.setOrdenid(ordenid);</span>
+<span class="fc" id="L112">            element.terminar(client.realdescuento());</span>
+<span class="fc" id="L113">        }</span>
+<span class="fc" id="L114">    }</span>
+
+    public List&lt;Pedido&gt; getCarro() {
+<span class="fc" id="L117">        return carro;</span>
+    }
+
+    public void setCarro(List&lt;Pedido&gt; carro) {
+<span class="nc" id="L121">        this.carro = carro;</span>
+<span class="nc" id="L122">    }</span>
+
+    public ModeloCliente getClient(){
+<span class="nc" id="L125">        return client;</span>
+    }
+
+    public void setClient(ModeloCliente client){
+<span class="fc" id="L129">        this.client = client;</span>
+<span class="fc" id="L130">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
