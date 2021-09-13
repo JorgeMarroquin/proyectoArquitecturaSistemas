@@ -35,7 +35,7 @@ stage 'Checkout'
     }
 
     stage('Deploy to Tomcat') {
-        sh "docker cp ventas-0.0.1-SNAPSHOT.war tomcatdev:/usr/local/tomcat/webapps"
+        sh "docker cp ventas-0.0.1-SNAPSHOT.jar tomcatdev:/usr/local/tomcat/webapps"
     }
 
 }
