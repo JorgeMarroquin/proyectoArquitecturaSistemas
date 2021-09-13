@@ -38,8 +38,8 @@ stage 'Checkout'
         sh 'ls'
 
         dir('ventas/target') {
-           sh 'mv ventas-0.0.1-SNAPSHOT.jar main-dev.jar'          
-          sh 'docker cp main-dev.jar tomcatdev:/usr/local/tomcat/webapps'
+           sh 'mv ventas-0.0.1-SNAPSHOT.war main-dev.war'          
+          sh 'docker cp main-dev.war tomcatdev:/usr/local/tomcat/webapps'
         }
     }
 
