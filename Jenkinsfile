@@ -35,7 +35,13 @@ stage 'Checkout'
     }
 
     stage('Deploy to Tomcat') {
-        sh "docker cp ./target/ventas-0.0.1-SNAPSHOT.jar tomcatdev:/usr/local/tomcat/webapps"
+        try {
+        sh 'ls'
+
+        dir('ventas/target') {
+           sh 'mv ventas-0.0.1-SNAPSHOT.jar main-dev.war'          
+          sh 'docker cp main-dev.jar tomcatdev:/usr/local/tomcat/webapps'
+        }
     }
 
 }
