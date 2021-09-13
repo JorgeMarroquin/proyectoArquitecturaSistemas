@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Dao.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ventas</a> &gt; <a href="index.source.html" class="el_package">com.ventas.ventas.tutorial</a> &gt; <span class="el_source">Dao.java</span></div><h1>Dao.java</h1><pre class="source lang-java linenums">package com.ventas.ventas.tutorial;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public class Dao {
+
+<span class="nc" id="L16">    private String dbuser = &quot;&quot;;</span>
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+<span class="nc" id="L19">    public Dao(JdbcTemplate jdbcTemplate) {</span>
+<span class="nc" id="L20">        this.jdbcTemplate = jdbcTemplate;</span>
+<span class="nc" id="L21">    }</span>
+
+
+    public List&lt;Modelo&gt; list(){
+<span class="nc" id="L25">        String sql = &quot;SELECT * FROM &quot;+ dbuser +&quot;CLIENTES&quot;;</span>
+<span class="nc" id="L26">        List&lt;Modelo&gt; listPrueba = jdbcTemplate.query(sql,BeanPropertyRowMapper.newInstance(Modelo.class));</span>
+<span class="nc" id="L27">        return listPrueba;</span>
+    }
+
+    public void save(Modelo nuevo) {
+<span class="nc" id="L31">        SimpleJdbcInsert insertActor = new SimpleJdbcInsert(jdbcTemplate);</span>
+<span class="nc" id="L32">        insertActor.withTableName(&quot;clientes&quot;).usingColumns(&quot;nombre&quot;);</span>
+<span class="nc" id="L33">        BeanPropertySqlParameterSource param = new BeanPropertySqlParameterSource(nuevo);</span>
+         
+<span class="nc" id="L35">        insertActor.execute(param);    </span>
+<span class="nc" id="L36">    }</span>
+
+    public Modelo get(int id) {
+<span class="nc" id="L39">		String sql = &quot;SELECT * FROM &quot;+ dbuser +&quot;CLIENTES WHERE clientid = ?&quot;;</span>
+<span class="nc" id="L40">		Object[] args = {id};</span>
+<span class="nc" id="L41">		Modelo sale = jdbcTemplate.queryForObject(sql, args, BeanPropertyRowMapper.newInstance(Modelo.class));</span>
+<span class="nc" id="L42">		return sale;</span>
+	}
+
+    public void update(Modelo modelo) {
+<span class="nc" id="L46">		String sql = &quot;UPDATE &quot;+ dbuser +&quot;CLIENTES SET nombre=:nombre WHERE clientid=:clientid&quot;;</span>
+<span class="nc" id="L47">		BeanPropertySqlParameterSource param = new BeanPropertySqlParameterSource(modelo);</span>
+<span class="nc" id="L48">		NamedParameterJdbcTemplate template = new NamedParameterJdbcTemplate(jdbcTemplate);</span>
+<span class="nc" id="L49">		template.update(sql, param);		</span>
+<span class="nc" id="L50">	}</span>
+
+    public void delete(int id) {
+<span class="nc" id="L53">		String sql = &quot;DELETE FROM &quot;+ dbuser +&quot;CLIENTES WHERE clientid = ?&quot;;</span>
+<span class="nc" id="L54">		jdbcTemplate.update(sql, id);</span>
+<span class="nc" id="L55">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

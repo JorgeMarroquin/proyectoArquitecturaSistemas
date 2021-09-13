@@ -15,6 +15,14 @@
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>1.8</java.version>
+		<sonar.language>java</sonar.language>
+    <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
+    <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
+       <sonar.coverage.jacoco.xmlReportPaths>${project.build.directory}/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+    <sonar.jacoco.reportsPaths>${project.build.directory}/jacoco-ut.exec</sonar.jacoco.reportsPaths>
+    <sonar.tests>src/test/java</sonar.tests>
+    <sonar.projectKey>sonar-test</sonar.projectKey>
+    <sonar.host.url>http://172.21.0.3:9000</sonar.host.url>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -70,8 +78,34 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.5</version>
+				<executions>
+					<execution>
+						<id>prepare-agent</id>
+						<goals>
+						 <goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>report</id>
+						<goals>
+						 <goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.sonarsource.scanner.maven</groupId>
+				<artifactId>sonar-maven-plugin</artifactId>
+				<version>3.7.0.1746</version>
+			</plugin>
 		</plugins>
 		
 	</build>
 
 </project>
+
+<!--test-->

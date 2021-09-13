@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Acciones.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ventas</a> &gt; <a href="index.source.html" class="el_package">com.ventas.ventas.users</a> &gt; <span class="el_source">Acciones.java</span></div><h1>Acciones.java</h1><pre class="source lang-java linenums">package com.ventas.ventas.users;
+
+import java.sql.Date;
+
+public class Acciones {
+    private int accionid;
+    private String accion;
+    private int usuarioid;
+    private String nombre;
+    private String tabla;
+    private Date fecha;
+    
+<span class="nc" id="L13">    public Acciones(){</span>
+
+<span class="nc" id="L15">    }</span>
+
+<span class="nc" id="L17">    public Acciones(int accionid, String accion, int usuarioid, String nombre, String tabla, Date fecha) {</span>
+<span class="nc" id="L18">        this.accionid = accionid;</span>
+<span class="nc" id="L19">        this.accion = accion;</span>
+<span class="nc" id="L20">        this.usuarioid = usuarioid;</span>
+<span class="nc" id="L21">        this.nombre = nombre;</span>
+<span class="nc" id="L22">        this.tabla = tabla;</span>
+<span class="nc" id="L23">        this.fecha = fecha;</span>
+<span class="nc" id="L24">    }</span>
+
+    public int getAccionid() {
+<span class="nc" id="L27">        return accionid;</span>
+    }
+
+    public void setAccionid(int accionid) {
+<span class="nc" id="L31">        this.accionid = accionid;</span>
+<span class="nc" id="L32">    }</span>
+
+    public String getAccion() {
+<span class="nc" id="L35">        return accion;</span>
+    }
+
+    public void setAccion(String accion) {
+<span class="nc" id="L39">        this.accion = accion;</span>
+<span class="nc" id="L40">    }</span>
+
+    public int getUsuarioid() {
+<span class="nc" id="L43">        return usuarioid;</span>
+    }
+
+    public void setUsuarioid(int usuarioid) {
+<span class="nc" id="L47">        this.usuarioid = usuarioid;</span>
+<span class="nc" id="L48">    }</span>
+
+    public String getNombre() {
+<span class="nc" id="L51">        return nombre;</span>
+    }
+
+    public void setNombre(String nombre) {
+<span class="nc" id="L55">        this.nombre = nombre;</span>
+<span class="nc" id="L56">    }</span>
+
+    public String getTabla() {
+<span class="nc" id="L59">        return tabla;</span>
+    }
+
+    public void setTabla(String tabla) {
+<span class="nc" id="L63">        this.tabla = tabla;</span>
+<span class="nc" id="L64">    }</span>
+
+    public Date getFecha() {
+<span class="nc" id="L67">        return fecha;</span>
+    }
+
+    public void setFecha(Date fecha) {
+<span class="nc" id="L71">        this.fecha = fecha;</span>
+<span class="nc" id="L72">    }</span>
+
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

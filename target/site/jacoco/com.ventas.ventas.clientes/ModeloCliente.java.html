@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ModeloCliente.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ventas</a> &gt; <a href="index.source.html" class="el_package">com.ventas.ventas.clientes</a> &gt; <span class="el_source">ModeloCliente.java</span></div><h1>ModeloCliente.java</h1><pre class="source lang-java linenums">package com.ventas.ventas.clientes;
+
+import javax.persistence.Entity;
+
+import java.sql.Date;
+
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
+public class ModeloCliente {
+<span class="pc" id="L14">    @Id</span>
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int nit = 0;
+
+    @Column
+    private String nombre;
+    @Column
+    private String email;
+    @Column 
+    private int telefono;
+    @Column
+    private String patente;
+    @Column
+    private int tipoclienteid;
+    @Column
+    private String tipocliente;
+    @Column
+    private Date vencimiento;
+<span class="pc" id="L32">    @Column </span>
+    private float descuento = 0;
+
+<span class="fc" id="L35">    public ModeloCliente(){</span>
+        
+<span class="fc" id="L37">    }</span>
+
+    public ModeloCliente(int nit, String nombre, String email, int telefono, String patente, int tipoclienteid,
+<span class="nc" id="L40">            String tipocliente, Date vencimiento, float descuento) {</span>
+<span class="nc" id="L41">        this.nit = nit;</span>
+<span class="nc" id="L42">        this.nombre = nombre;</span>
+<span class="nc" id="L43">        this.email = email;</span>
+<span class="nc" id="L44">        this.telefono = telefono;</span>
+<span class="nc" id="L45">        this.patente = patente;</span>
+<span class="nc" id="L46">        this.tipoclienteid = tipoclienteid;</span>
+<span class="nc" id="L47">        this.tipocliente = tipocliente;</span>
+<span class="nc" id="L48">        this.vencimiento = vencimiento;</span>
+<span class="nc" id="L49">        this.descuento = descuento;</span>
+<span class="nc" id="L50">    }</span>
+
+    public int getNit() {
+<span class="nc" id="L53">        return nit;</span>
+    }
+
+    public void setNit(int nit) {
+<span class="nc" id="L57">        this.nit = nit;</span>
+<span class="nc" id="L58">    }</span>
+
+    public String getNombre() {
+<span class="nc" id="L61">        return nombre;</span>
+    }
+
+    public void setNombre(String nombre) {
+<span class="nc" id="L65">        this.nombre = nombre;</span>
+<span class="nc" id="L66">    }</span>
+
+    public String getEmail() {
+<span class="nc" id="L69">        return email;</span>
+    }
+
+    public void setEmail(String email) {
+<span class="nc" id="L73">        this.email = email;</span>
+<span class="nc" id="L74">    }</span>
+
+    public int getTelefono() {
+<span class="nc" id="L77">        return telefono;</span>
+    }
+
+    public void setTelefono(int telefono) {
+<span class="nc" id="L81">        this.telefono = telefono;</span>
+<span class="nc" id="L82">    }</span>
+
+    public String getPatente() {
+<span class="nc" id="L85">        return patente;</span>
+    }
+
+    public void setPatente(String patente) {
+<span class="nc" id="L89">        this.patente = patente;</span>
+<span class="nc" id="L90">    }</span>
+
+    public int getTipoclienteid() {
+<span class="nc" id="L93">        return tipoclienteid;</span>
+    }
+
+    public void setTipoclienteid(int tipoclienteid) {
+<span class="nc" id="L97">        this.tipoclienteid = tipoclienteid;</span>
+<span class="nc" id="L98">    }</span>
+
+    public String getTipocliente() {
+<span class="nc" id="L101">        return tipocliente;</span>
+    }
+
+    public void setTipocliente(String tipocliente) {
+<span class="nc" id="L105">        this.tipocliente = tipocliente;</span>
+<span class="nc" id="L106">    }</span>
+
+    public Date getVencimiento() {
+<span class="nc" id="L109">        return vencimiento;</span>
+    }
+
+    public void setVencimiento(String vencimiento) {
+<span class="fc" id="L113">        this.vencimiento = Date.valueOf(vencimiento);</span>
+<span class="fc" id="L114">    }</span>
+
+    public float getDescuento(){
+<span class="nc" id="L117">        return descuento;</span>
+    }
+    
+    public void setDescuento(float descuento){
+<span class="fc" id="L121">            this.descuento = descuento;</span>
+<span class="fc" id="L122">    }</span>
+
+    public float realdescuento(){
+<span class="fc" id="L125">        Date date = new Date(System.currentTimeMillis());</span>
+<span class="fc" id="L126">        Date venc = this.vencimiento;</span>
+<span class="fc" id="L127">        float respuesta = 0;</span>
+<span class="pc bpc" id="L128" title="1 of 2 branches missed.">        if(venc != null){</span>
+<span class="pc bpc" id="L129" title="1 of 2 branches missed.">            if(venc.compareTo(date) &lt; 0){</span>
+<span class="nc" id="L130">                respuesta = 0;</span>
+            }else{
+<span class="fc" id="L132">                respuesta = this.descuento;</span>
+            }
+        }
+<span class="fc" id="L135">        return respuesta;</span>
+    }
+
+    public String estadoCuenta(){
+<span class="nc" id="L139">        Date date = new Date(System.currentTimeMillis());</span>
+<span class="nc" id="L140">        Date venc = this.vencimiento;</span>
+<span class="nc" id="L141">        String respuesta = &quot;&quot;;</span>
+<span class="nc bnc" id="L142" title="All 2 branches missed.">        if(venc != null){</span>
+<span class="nc bnc" id="L143" title="All 2 branches missed.">            if(venc.compareTo(date) &lt; 0){</span>
+<span class="nc" id="L144">                respuesta = &quot;Vencido&quot;;</span>
+            }else{
+<span class="nc" id="L146">                respuesta = &quot;Vigente&quot;;</span>
+            }
+        }
+<span class="nc" id="L149">        return respuesta;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
