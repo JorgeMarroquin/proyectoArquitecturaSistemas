@@ -1,0 +1,14 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Spring Boot-VentasApplication<ventas>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "console": "internalConsole",
+      "mainClass": "com.ventas.ventas.VentasApplication",
+      "projectName": "ventas",
+      "args": ""
+    }
+  ]
+}
