@@ -20,11 +20,11 @@ stage 'Checkout'
           timeout(time: 1, unit: 'HOURS') {
               def qg = waitForQualityGate()
               if (qg.status != 'OK') {
-                  mail bcc: '', body: 'SonarQube Failed', cc: '', from: '', replyTo: '', subject: "QA failed in branch ${env.BRANCH_NAME}", to: 'marroquin181358@unis.edu.gt'
+                  mail bcc: '', body: 'SonarQube Failed', cc: '', from: '', replyTo: '', subject: "QA failed in branch ${env.BRANCH_NAME}", to: 'marroquin181358@unis.edu.gt, jflores@unis.edu.gt'
                   error "Pipeline aborted due to quality gate failure: ${qg.status}"
               }
               if (qg.status == 'OK') {
-                  mail bcc: '', body: 'SonarQube Acepted', cc: '', from: '', replyTo: '', subject: "QA Acepted in branch ${env.BRANCH_NAME}", to: 'marroquin181358@unis.edu.gt'
+                  mail bcc: '', body: 'SonarQube Acepted', cc: '', from: '', replyTo: '', subject: "QA Acepted in branch ${env.BRANCH_NAME}", to: 'marroquin181358@unis.edu.gt, jflores@unis.edu.gt'
               }
           }
       }
