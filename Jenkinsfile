@@ -36,6 +36,6 @@ stage 'Checkout'
 
     stage('Deploy to Tomcat') {
         sh 'cd target/'
-        deploy adapters: [tomcat9(path: '', url: 'http://172.21.0.2:8888/')], contextPath: 'rps', war: '**/*.war'
+        deploy adapters: [tomcat9(path: '', url: 'http://172.21.0.2:8080/')], contextPath: 'rps', war: '**/*.war'
     }    
 }
