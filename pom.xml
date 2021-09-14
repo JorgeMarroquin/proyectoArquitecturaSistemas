@@ -11,6 +11,7 @@
 	<groupId>com.ventas</groupId>
 	<artifactId>ventas</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>war</packaging>
 	<name>ventas</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
