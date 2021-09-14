@@ -36,11 +36,7 @@ stage 'Checkout'
 
     stage('Deploy to Tomcat') {
         sh 'cd target/'
-        steps{
-            script {
-                deploy adapters: [tomcat9(credentialsId: 'dfc6effb-a846-47d1-8504-0e544d4c9c7a', path: '', url: 'http://localhost:8888')], contextPath: null, war: '**/*.wa'
-            }    
-        }
-        
+        deploy adapters: [tomcat9(credentialsId: 'dfc6effb-a846-47d1-8504-0e544d4c9c7a', path: '', url: 'http://localhost:8888')], contextPath: null, war: '**/*.war'
+
     }    
 }
