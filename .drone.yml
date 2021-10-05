@@ -7,3 +7,12 @@ steps:
   commands:
   - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
   - mvn test -B
+
+steps:
+- name: code-analysis
+  image: aosapps/drone-sonar-plugin
+  settings:
+    sonar_host:
+      from_secret: http://40.78.142.54:9000/
+    sonar_token:
+      from_secret: 2e159656db8297dc9935fc49db97574ff707241d
