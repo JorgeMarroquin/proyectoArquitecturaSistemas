@@ -12,7 +12,11 @@ steps:
 
 - name: code-analysis
   image: aosapps/drone-sonar-plugin
-  secrets: [http://40.78.142.54:9000, 2e159656db8297dc9935fc49db97574ff707241d]
+  settings:
+    sonar_host:
+      from_secret: "http://40.78.142.54:9000"
+    sonar_token:
+      from_secret: 2e159656db8297dc9935fc49db97574ff707241d
 +   ver: 1.0
 +   timeout: 20
 +   sources: .
