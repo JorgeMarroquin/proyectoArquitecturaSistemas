@@ -13,5 +13,6 @@ steps:
 - name: sonar
   image: maven:3-jdk-11
   commands:
-    - mvn clean verify sonar:sonar -Dsonar.login=admin -Dsonar.password=Jmo=47558520 -Dsonar.host.url=http://104.43.137.120:9000/ -Dsonar.projectName=VentasDrone
+    - mvn clean install
+    - mvn sonar:sonar -Dsonar.login=admin -Dsonar.password=Jmo=47558520 -Dsonar.host.url=http://104.43.137.120:9000/ -Dsonar.projectName=VentasDrone
 + level: DEBUG

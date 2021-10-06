@@ -12,9 +12,4 @@ public class VentasApplication extends SpringBootServletInitializer{
 		SpringApplication.run(VentasApplication.class, args);
 	}
 
-	@Override
-  protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-      return builder.sources(VentasApplication.class);
-  }
-
 }
