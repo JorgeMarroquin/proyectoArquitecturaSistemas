@@ -10,15 +10,8 @@ steps:
   - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
   - mvn test -B
 
-- name: code-analysis
-  image: aosapps/drone-sonar-plugin
-  settings:
-    sonar_host:
-      from_secret: http://40.78.142.54
-    sonar_token:
-      from_secret: 2e159656db8297dc9935fc49db97574ff707241d
-+   ver: 1.0
-+   timeout: 20
-+   sources: .
+  - name: sonar
+    image: maven:3-jdk-11
+    commands:
+      - mvn clean verify sonar:sonar -Dsonar.login=admin -Dsonar.password=Jmo=47558520 -Dsonar.host.url=http://104.43.137.120:9000/ -Dsonar.projectName=VentasDrone
 +   level: DEBUG
-+   showProfiling: true
