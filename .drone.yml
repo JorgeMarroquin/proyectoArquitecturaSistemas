@@ -15,4 +15,3 @@ steps:
   commands:
     - mvn clean install
     - mvn sonar:sonar -Dsonar.login=admin -Dsonar.password=Jmo=47558520 -Dsonar.host.url=http://104.43.137.120:9000/ -Dsonar.projectName=VentasDrone
-+ level: DEBUG
