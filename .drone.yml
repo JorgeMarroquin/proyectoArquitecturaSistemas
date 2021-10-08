@@ -32,7 +32,7 @@ steps:
     - apk add curl
     - stat ventas-0.0.1-SNAPSHOT.war
     - mv  ventas-0.0.1-SNAPSHOT.war dev.war
-    - curl -v -u admin:admin -T dev.war 'http://104.43.137.120:8087/manager/text/deploy?path=/dev&update=true'
+    - curl -v -u admin:admin -T dev.war 'http://104.43.137.120:8085/manager/text/deploy?path=/dev&update=true'
   when:
     branch:
       - dev
@@ -44,7 +44,7 @@ steps:
     - apk add curl
     - stat ventas-0.0.1-SNAPSHOT.war
     - mv  ventas-0.0.1-SNAPSHOT.war uat.war
-    - curl -v -u admin:admin -T uat.war 'http://104.43.137.120:8087/manager/text/deploy?path=/uat&update=true'
+    - curl -v -u admin:admin -T uat.war 'http://104.43.137.120:8086/manager/text/deploy?path=/uat&update=true'
   when:
     branch:
       - uat
@@ -56,7 +56,7 @@ steps:
     - apk add curl
     - stat ventas-0.0.1-SNAPSHOT.war
     - mv  ventas-0.0.1-SNAPSHOT.war main.war
-    - curl -v -u admin:admin -T main.war 'http://104.43.137.120:8087/manager/text/deploy?path=/main&update=true'
+    - curl -v -u admin:admin -T main.war 'http://104.43.137.120:8086/manager/text/deploy?path=/main&update=true'
   when:
     branch:
       - main
