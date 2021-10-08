@@ -28,7 +28,7 @@ steps:
 - name: tomcatDEV
   image: maven:3-jdk-11
   commands:
-    - mvn -Dspring.profiles.active=dev package
+    - mvn -Puat package
     - cd target/
     - stat ventas-0.0.1-SNAPSHOT.war
     - mv  ventas-0.0.1-SNAPSHOT.war dev.war
