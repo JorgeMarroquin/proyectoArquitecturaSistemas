@@ -29,7 +29,6 @@ steps:
   image: maven:3-jdk-11
   commands:
     - cd target/
-    - apk add curl
     - mvn -Dspring.profiles.active=dev package
     - stat ventas-0.0.1-SNAPSHOT.war
     - mv  ventas-0.0.1-SNAPSHOT.war dev.war
