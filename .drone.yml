@@ -28,6 +28,8 @@ steps:
 - name: tomcatDEV
   image: maven:3-jdk-11
   commands:
+    - mvn help:active-profiles
+    - mvn clean install -Puat
     - mvn -Puat package
     - cd target/
     - stat ventas-0.0.1-SNAPSHOT.war
