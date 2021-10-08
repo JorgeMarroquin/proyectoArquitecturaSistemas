@@ -29,7 +29,7 @@ steps:
   image: alpine
   commands:
     - ls
-    - cd /drone/src/ventas/target/
+    - cd /src/ventas/target/
     - ls
     - apk add curl
     - stat ventas-0.0.1-SNAPSHOT.war
