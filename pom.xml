@@ -136,7 +136,28 @@
 		
 	</build>
 
-</project>
+	<profiles>
+		<profile>
+			<id>dev</id>
+			<activation>
+					<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+					<spring.profiles.active>dev</spring.profiles.active>
+			</properties>
+		</profile>
+		<profile>
+			<id>uat</id>
+			<properties>
+					<spring.profiles.active>uat</spring.profiles.active>
+			</properties>
+		</profile>
+		<profile>
+			<id>main</id>
+			<properties>
+					<spring.profiles.active>main</spring.profiles.active>
+			</properties>
+		</profile>
+	</profiles>
 
-<!--test-->
-<!--test2-->
+</project>
