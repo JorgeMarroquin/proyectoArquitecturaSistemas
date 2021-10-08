@@ -29,9 +29,9 @@ stage 'Checkout'
           }
       }
       
-    stage('Compile-Package-create-war-file') {
+    stage("Compile WAR file ${env.BRANCH_NAME}") {
         def mvnHome =  tool name: 'M3', type: 'maven'
-        sh "${mvnHome}/bin/mvn package"
+        sh "${mvnHome}/bin/mvn -Dspring.profiles.active=dev package"
     }
 
     stage('Deploy to Tomcat') {
