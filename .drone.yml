@@ -9,9 +9,9 @@ steps:
   commands:
   - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
   - mvn test -B
-  when:
+  trigger:
     event:
-      include:     
+      include:    
       - pull_request
 
 - name: sonar
@@ -19,7 +19,7 @@ steps:
   commands:
     - mvn clean install
     - mvn sonar:sonar -Dsonar.login=admin -Dsonar.password=Jmo=47558520 -Dsonar.host.url=http://104.43.137.120:9000/ -Dsonar.projectName=VentasDrone
-  when:
+  trigger:
     event:
       include:     
       - pull_request
@@ -28,7 +28,7 @@ steps:
   image: maven:3-jdk-11
   commands:
     - mvn clean verify sonar:sonar sonar-quality-gate:check -Dsonar.login=admin -Dsonar.password=tzec99 -Dsonar.host.url=http://52.188.188.66:9000
-  when:
+  trigger:
     event:
       include:     
       - pull_request
