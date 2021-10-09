@@ -18,7 +18,7 @@ steps:
 - name: Quality-Gate
   image: maven:3-jdk-11
   commands:
-    - mvn sonar:sonar sonar-quality-gate:check -Dsonar.login=admin -Dsonar.password=admin -Dsonar.host.url=http://104.43.137.120:9000
+    - mvn sonar:sonar sonar-quality-gate:check -Dsonar.login=admin -Dsonar.password=admin -Dsonar.host.url=http://104.43.137.120:9000/
 
 - name: tomcatDEV
   image: maven:3-jdk-11
