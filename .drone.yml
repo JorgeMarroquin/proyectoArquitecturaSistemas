@@ -14,11 +14,6 @@ steps:
     - mvn clean install
     - mvn sonar:sonar -Dsonar.login=admin -Dsonar.password=Jmo=47558520 -Dsonar.host.url=http://104.43.137.120:9000/ -Dsonar.projectName=VentasDrone
 
-- name: Quality-Gate
-  image: maven:3-jdk-11
-  commands:
-    - mvn clean verify sonar:sonar sonar-quality-gate:check -Dsonar.login=admin -Dsonar.password=tzec99 -Dsonar.host.url=http://104.43.137.120:9000
-
 - name: tomcatDEV
   image: maven:3-jdk-11
   commands:
