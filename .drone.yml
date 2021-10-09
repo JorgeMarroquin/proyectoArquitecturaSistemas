@@ -18,6 +18,7 @@ steps:
   image: maven:3-jdk-11
   commands:
     - mvn -Dspring.profiles.active=uat clean  install
+    - mvn -Dspring.profiles.active=uat package
     - cd target/
     - mv  ventas-0.0.1-SNAPSHOT.war dev.war
     - curl -v -u admin:admin -T dev.war 'http://104.43.137.120:8085/manager/text/deploy?path=/dev&update=true'
