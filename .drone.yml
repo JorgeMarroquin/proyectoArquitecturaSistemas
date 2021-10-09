@@ -1,8 +1,6 @@
 kind: pipeline
-type: docker
 name: default
 
-+ level: DEBUG
 steps:
 - name: test
   image: maven:3-jdk-11
