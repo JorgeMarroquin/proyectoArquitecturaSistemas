@@ -1,7 +1,5 @@
 kind: pipeline
-type: docker
 name: default
-
 
 steps:
 - name: test
@@ -9,29 +7,17 @@ steps:
   commands:
   - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
   - mvn test -B
-  trigger:
-    event:
-      include:    
-      - pull_request
 
 - name: sonar
   image: maven:3-jdk-11
   commands:
     - mvn clean install
     - mvn sonar:sonar -Dsonar.login=admin -Dsonar.password=Jmo=47558520 -Dsonar.host.url=http://104.43.137.120:9000/ -Dsonar.projectName=VentasDrone
-  trigger:
-    event:
-      include:     
-      - pull_request
 
 - name: Quality-Gate
   image: maven:3-jdk-11
   commands:
     - mvn clean verify sonar:sonar sonar-quality-gate:check -Dsonar.login=admin -Dsonar.password=tzec99 -Dsonar.host.url=http://52.188.188.66:9000
-  trigger:
-    event:
-      include:     
-      - pull_request
 
 - name: tomcatDEV
   image: maven:3-jdk-11
