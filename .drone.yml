@@ -9,10 +9,6 @@ steps:
   commands:
   - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
   - mvn test -B
-  when:
-    event:
-      include:     
-      - push
 
 - name: sonar
   image: maven:3-jdk-11
