@@ -25,7 +25,7 @@ steps:
   image: drillster/drone-email
   settings:
     from: cakedaybakerywelcome@gmail.com
-    host: smtp.sendgrid.net
+    host: smtp.gmail.com
     port: 465
     username:
       from_secret: correo
@@ -86,3 +86,26 @@ steps:
     event:
       include:
       - push
+
+- name: CorreoPipelineStatus
+  image: drillster/drone-email
+  settings:
+    from: cakedaybakerywelcome@gmail.com
+    host: smtp.gmail.com
+    port: 465
+    username:
+      from_secret: correo
+    password: 
+      from_secret: correoPassword    
+    recipients:
+        - jorge.marroquin.ochoa@gmail.com
+    subject: Pipeline Status Drone
+    body: La pipeline ha finalizado
+    attachment: build-result.xml
+  when:
+    event:
+      include:     
+      - push
+    status:      
+    - failure
+    - success
