@@ -16,9 +16,7 @@ node {
         stage('SonarQube Analysis') {
             def mvnHome =  tool name: 'M3', type: 'maven'
             withSonarQubeEnv('sonarq') { 
-                withCredentials([sonarq(credentialsId: 'aae686ba-0810-4fc9-8c89-eb2cd201f71c', variable: 'TOKEN')]) {
-                    sh "${mvnHome}/bin/mvn sonar:sonar -Dsonar.login=admin -Dsonar.password=${TOKEN}"
-                }
+            sh "${mvnHome}/bin/mvn sonar:sonar -Dsonar.login=admin -Dsonar.password=Jmo=47558520"
             }
         }
   
