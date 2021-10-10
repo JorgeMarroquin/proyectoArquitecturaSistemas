@@ -1,10 +1,8 @@
 node {
-
+    stage 'Checkout'
+        checkout scm
+        
     if (env.BRANCH_NAME.startsWith('PR')) {
-
-        stage 'Checkout'
-            checkout scm
-
         stage('test') {
             def mvnHome =  tool name: 'M3', type: 'maven'
             sh "${mvnHome}/bin/mvn test"
