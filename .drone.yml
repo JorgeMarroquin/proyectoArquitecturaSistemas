@@ -50,7 +50,7 @@ steps:
     - mvn -Dspring.profiles.active=uat package
     - cd target/
     - mv  ventas-0.0.1-SNAPSHOT.war devDrone.war
-    - curl -v -u admin:$TOMCATPASSWORD -T devDrone.war 'http://104.43.137.120:8085/manager/text/deploy?path=/devDrone&update=true'
+    - curl -v -u admin:${TOMCATPASSWORD} -T devDrone.war 'http://104.43.137.120:8085/manager/text/deploy?path=/devDrone&update=true'
   secrets: [tomcatPassword]
   when:
     branch:
