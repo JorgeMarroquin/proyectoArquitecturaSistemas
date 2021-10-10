@@ -1,4 +1,9 @@
-node {
+pipeline {
+    agent any
+
+    environment {
+        GENERALPASSWORD = credentialsId('aae686ba-0810-4fc9-8c89-eb2cd201f71c')
+    }
 
     stage 'Checkout'
         checkout scm
@@ -13,7 +18,6 @@ node {
         //def mvnHome = tool 'M3' 
         stage('SonarQube Analysis') {
             def mvnHome =  tool name: 'M3', type: 'maven'
-            def GENERALPASSWORD = credentials('aae686ba-0810-4fc9-8c89-eb2cd201f71c')
             withSonarQubeEnv('sonarq') { 
             sh "${mvnHome}/bin/mvn sonar:sonar -Dsonar.login=admin -Dsonar.password=${GENERALPASSWORD}"
             }
