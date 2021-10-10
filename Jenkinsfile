@@ -1,7 +1,10 @@
 node {
+
+    environment {
+        GENERALPASSWORD = credentials('aae686ba-0810-4fc9-8c89-eb2cd201f71c')
+    }
     stage 'Checkout'
         checkout scm
-        echo env.BRANCH_NAME
 
     if (env.BRANCH_NAME.startsWith('PR')) {
         stage('test') {
@@ -21,11 +24,11 @@ node {
             timeout(time: 1, unit: 'HOURS') {
                 def qg = waitForQualityGate()
                 if (qg.status != 'OK') {
-                    mail bcc: '', body: 'SonarQube Failed', cc: '', from: '', replyTo: '', subject: "QA failed in branch ${env.BRANCH_NAME}", to: 'marroquin181358@unis.edu.gt'
+                    mail bcc: '', body: 'Pipeline SonarQube Failed', cc: '', from: '', replyTo: '', subject: "QA failed in branch ${env.BRANCH_NAME}", to: 'marroquin181358@unis.edu.gt'
                     error "Pipeline aborted due to quality gate failure: ${qg.status}"
                 }
                 if (qg.status == 'OK') {
-                    mail bcc: '', body: 'SonarQube Acepted', cc: '', from: '', replyTo: '', subject: "QA Acepted in branch ${env.BRANCH_NAME}", to: 'marroquin181358@unis.edu.gt'
+                    mail bcc: '', body: 'Pipeline SonarQube Acepted', cc: '', from: '', replyTo: '', subject: "QA Acepted in branch ${env.BRANCH_NAME}", to: 'marroquin181358@unis.edu.gt'
                 }
             }
         }
@@ -53,7 +56,7 @@ node {
 
         stage('Deploy to Tomcat') {
             sh 'cd target/'
-            deploy adapters: [tomcat9(credentialsId: 'f9953ce9-74cc-4793-b16f-f29df93a1085', path: '', url: 'http://104.43.137.120:8086')], contextPath: 'uat', war: '**/*.war'
+            deploy adapters: [tomcat9(credentialsId: 'f9953ce9-74cc-4793-b16f-f29df93a1085', path: '', url: 'http://104.43.137.120:8085')], contextPath: 'uat', war: '**/*.war'
 
         }
         
@@ -66,7 +69,7 @@ node {
 
         stage('Deploy to Tomcat') {
             sh 'cd target/'
-            deploy adapters: [tomcat9(credentialsId: 'f9953ce9-74cc-4793-b16f-f29df93a1085', path: '', url: 'http://104.43.137.120:8087')], contextPath: 'main', war: '**/*.war'
+            deploy adapters: [tomcat9(credentialsId: 'f9953ce9-74cc-4793-b16f-f29df93a1085', path: '', url: 'http://104.43.137.120:8085')], contextPath: 'main', war: '**/*.war'
 
         }
         
