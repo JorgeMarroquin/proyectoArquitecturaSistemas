@@ -32,7 +32,7 @@ steps:
     password: 
       from_secret: correoPassword    
     recipients:
-        - marroquin181358@unis.edu.gt
+        - jorge.marroquin.ochoa@gmail.com
     body: El código no ha pasado la quality gate de sonarqube
     attachment: build-result.xml
   when:
