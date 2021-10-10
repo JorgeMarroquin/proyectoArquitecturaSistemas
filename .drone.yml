@@ -58,7 +58,7 @@ steps:
       - push
 
 - name: tomcatUAT
-  image: alpine
+  image: maven:3-jdk-11
   commands:
     - mvn -Dspring.profiles.active=uat clean  install
     - mvn -Dspring.profiles.active=uat package
@@ -73,7 +73,7 @@ steps:
       - push
 
 - name: tomcatMAIN
-  image: alpine
+  image: maven:3-jdk-11
   commands:
     - mvn -Dspring.profiles.active=main clean  install
     - mvn -Dspring.profiles.active=main package
