@@ -15,8 +15,7 @@ steps:
 - name: SonarQualityGate
   image: maven:3-jdk-11
   commands:
-  - mvn sonar:sonar sonar-quality-gate:check -Dsonar.login=admin -Dsonar.password=$SONARPASSWORD -Dsonar.host.url=http://104.43.137.120:9000
-  secrets: [sonarPassword]
+  - mvn sonar:sonar sonar-quality-gate:check -Dsonar.login=admin -Dsonar.password=Jmo=47558520 -Dsonar.host.url=http://104.43.137.120:9000
   when:
     event:
       include:     
@@ -25,7 +24,7 @@ steps:
 - name: CorreoSonar
   image: drillster/drone-email
   settings:
-    from: Pipeline Drone Failed
+    from: cakedaybakerywelcome@gmail.com
     host: smtp.sendgrid.net
     port: 465
     username:
@@ -46,35 +45,44 @@ steps:
 - name: tomcatDEV
   image: maven:3-jdk-11
   commands:
-    - mvn -Dspring.profiles.active=uat clean  install
-    - mvn -Dspring.profiles.active=uat package
+    - mvn -Dspring.profiles.active=dev clean  install
+    - mvn -Dspring.profiles.active=dev package
     - cd target/
     - mv  ventas-0.0.1-SNAPSHOT.war devDrone.war
     - curl -v -u admin:adminSecure -T devDrone.war 'http://104.43.137.120:8085/manager/text/deploy?path=/devDrone&update=true'
   when:
     branch:
       - dev
+    event:
+      include:
+      - push
 
 - name: tomcatUAT
   image: alpine
   commands:
+    - mvn -Dspring.profiles.active=uat clean  install
+    - mvn -Dspring.profiles.active=uat package
     - cd target/
-    - apk add curl
-    - stat ventas-0.0.1-SNAPSHOT.war
     - mv  ventas-0.0.1-SNAPSHOT.war uatDrone.war
     - curl -v -u admin:adminSecure -T uatDrone.war 'http://104.43.137.120:8085/manager/text/deploy?path=/uatDrone&update=true'
   when:
     branch:
       - uat
+    event:
+      include:
+      - push
 
 - name: tomcatMAIN
   image: alpine
   commands:
+    - mvn -Dspring.profiles.active=main clean  install
+    - mvn -Dspring.profiles.active=main package
     - cd target/
-    - apk add curl
-    - stat ventas-0.0.1-SNAPSHOT.war
     - mv  ventas-0.0.1-SNAPSHOT.war mainDrone.war
     - curl -v -u admin:adminSecure -T mainDrone.war 'http://104.43.137.120:8085/manager/text/deploy?path=/mainDrone&update=true'
   when:
     branch:
       - main
+    event:
+      include:
+      - push

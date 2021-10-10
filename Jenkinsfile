@@ -16,7 +16,9 @@ node {
         stage('SonarQube Analysis') {
             def mvnHome =  tool name: 'M3', type: 'maven'
             withSonarQubeEnv('sonarq') { 
-            sh "${mvnHome}/bin/mvn sonar:sonar -Dsonar.login=admin -Dsonar.password=Jmo=47558520"
+                withCredentials([sonarq(credentialsId: 'aae686ba-0810-4fc9-8c89-eb2cd201f71c', variable: 'TOKEN')]) {
+                    sh "${mvnHome}/bin/mvn sonar:sonar -Dsonar.login=admin -Dsonar.password=${TOKEN}"
+                }
             }
         }
   
@@ -24,11 +26,11 @@ node {
             timeout(time: 1, unit: 'HOURS') {
                 def qg = waitForQualityGate()
                 if (qg.status != 'OK') {
-                    mail bcc: '', body: 'SonarQube Failed', cc: '', from: '', replyTo: '', subject: "QA failed in branch ${env.BRANCH_NAME}", to: 'marroquin181358@unis.edu.gt'
+                    mail bcc: '', body: 'Pipeline SonarQube Failed', cc: '', from: '', replyTo: '', subject: "QA failed in branch ${env.BRANCH_NAME}", to: 'marroquin181358@unis.edu.gt'
                     error "Pipeline aborted due to quality gate failure: ${qg.status}"
                 }
                 if (qg.status == 'OK') {
-                    mail bcc: '', body: 'SonarQube Acepted', cc: '', from: '', replyTo: '', subject: "QA Acepted in branch ${env.BRANCH_NAME}", to: 'marroquin181358@unis.edu.gt'
+                    mail bcc: '', body: 'Pipeline SonarQube Acepted', cc: '', from: '', replyTo: '', subject: "QA Acepted in branch ${env.BRANCH_NAME}", to: 'marroquin181358@unis.edu.gt'
                 }
             }
         }
