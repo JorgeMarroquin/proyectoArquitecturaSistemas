@@ -6,14 +6,20 @@ node {
     stage 'Checkout'
         checkout scm
 
-    if (env.BRANCH_NAME.startsWith('PR')) {
+   
         stage('test') {
+            when{
+                branch: 'PR-*'
+            }
             def mvnHome =  tool name: 'M3', type: 'maven'
             sh "${mvnHome}/bin/mvn test"
             }
  
         //def mvnHome = tool 'M3' 
         stage('SonarQube Analysis') {
+            when{
+                branch: 'PR-*'
+            }
             def mvnHome =  tool name: 'M3', type: 'maven'
             withSonarQubeEnv('sonarq') { 
             sh('$mvnHome/bin/mvn sonar:sonar -Dsonar.login=admin -Dsonar.password=$GENERALPASSWORD')
@@ -21,6 +27,9 @@ node {
         }
   
         stage("Quality Gate"){
+            when{
+                branch: 'PR-*'
+            }
             timeout(time: 1, unit: 'HOURS') {
                 def qg = waitForQualityGate()
                 if (qg.status != 'OK') {
@@ -33,7 +42,7 @@ node {
             }
         }
     
-    }else if(env.BRANCH_NAME == 'dev') {
+    if(env.BRANCH_NAME == 'dev') {
       
         stage("Compile WAR file ${env.BRANCH_NAME}") {
             def mvnHome =  tool name: 'M3', type: 'maven'
