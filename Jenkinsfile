@@ -1,11 +1,11 @@
 node {
 
     environment {
-        GENERALPASSWORD = credentialsId('aae686ba-0810-4fc9-8c89-eb2cd201f71c')
+        def GENERALPASSWORD = credentials('aae686ba-0810-4fc9-8c89-eb2cd201f71c')
     }
     stage 'Checkout'
         checkout scm
-        echo ${GENERALPASSWORD}
+        echo GENERALPASSWORD
 
     if (env.BRANCH_NAME.startsWith('PR')) {
         stage('test') {
