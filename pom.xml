@@ -133,6 +133,13 @@
 				<artifactId>sonar-maven-plugin</artifactId>
 				<version>3.7.0.1746</version>
 			</plugin>
+
+			<plugin>
+				<groupId>io.github.r0bb3n</groupId>
+				<artifactId>sonar-quality-gate-maven-plugin</artifactId>
+				<version>1.1.0</version>
+			</plugin>
+			
 		</plugins>
 		
 	</build>
