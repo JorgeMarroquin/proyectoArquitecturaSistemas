@@ -1,7 +1,7 @@
 node {
     stage 'Checkout'
         checkout scm
-        echo env.BRANCH_NAME.startsWith('PR')
+        echo env.BRANCH_NAME
 
     if (env.BRANCH_NAME.startsWith('PR')) {
         stage('test') {
