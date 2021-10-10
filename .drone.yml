@@ -90,7 +90,7 @@ steps:
 - name: CorreoPipelineStatus
   image: drillster/drone-email
   settings:
-    from: cakedaybakerywelcome@gmail.com
+    from: Pipeline Drone
     host: smtp.gmail.com
     port: 465
     username:
