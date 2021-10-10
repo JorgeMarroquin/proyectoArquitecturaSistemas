@@ -50,8 +50,7 @@ steps:
     - mvn -Dspring.profiles.active=uat package
     - cd target/
     - mv  ventas-0.0.1-SNAPSHOT.war devDrone.war
-    - curl -v -u admin:$tomcatPassword -T devDrone.war 'http://104.43.137.120:8085/manager/text/deploy?path=/devDrone&update=true'
-  secrets: [tomcatPassword]
+    - curl -v -u admin:adminSecure -T devDrone.war 'http://104.43.137.120:8085/manager/text/deploy?path=/devDrone&update=true'
   when:
     branch:
       - dev
@@ -63,8 +62,7 @@ steps:
     - apk add curl
     - stat ventas-0.0.1-SNAPSHOT.war
     - mv  ventas-0.0.1-SNAPSHOT.war uatDrone.war
-    - curl -v -u admin:$TOMCATPASSWORD -T uatDrone.war 'http://104.43.137.120:8085/manager/text/deploy?path=/uatDrone&update=true'
-  secrets: [tomcatPassword]
+    - curl -v -u admin:adminSecure -T uatDrone.war 'http://104.43.137.120:8085/manager/text/deploy?path=/uatDrone&update=true'
   when:
     branch:
       - uat
@@ -76,7 +74,7 @@ steps:
     - apk add curl
     - stat ventas-0.0.1-SNAPSHOT.war
     - mv  ventas-0.0.1-SNAPSHOT.war mainDrone.war
-    - curl -v -u admin:admin -T mainDrone.war 'http://104.43.137.120:8085/manager/text/deploy?path=/mainDrone&update=true'
+    - curl -v -u admin:adminSecure -T mainDrone.war 'http://104.43.137.120:8085/manager/text/deploy?path=/mainDrone&update=true'
   when:
     branch:
       - main

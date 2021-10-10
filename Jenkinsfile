@@ -5,7 +5,7 @@ node {
     }
     stage 'Checkout'
         checkout scm
-        echo env.BRANCH_NAME
+        echo GENERALPASSWORD
 
     if (env.BRANCH_NAME.startsWith('PR')) {
         stage('test') {
