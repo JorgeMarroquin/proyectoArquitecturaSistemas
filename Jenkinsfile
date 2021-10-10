@@ -34,6 +34,9 @@ node {
     }else if(env.BRANCH_NAME == 'dev') {
       
         stage("Compile WAR file ${env.BRANCH_NAME}") {
+            withMaven(maven: 'M3') {
+            sh 'mvn clean install'
+        }
             def mvnHome =  tool name: 'M3', type: 'maven'
             sh "${mvnHome}/bin/mvn -Dspring.profiles.active=dev package"
         }
