@@ -1,4 +1,8 @@
 node {
+
+    environment {
+        GENERALPASSWORD    = credentials('aae686ba-0810-4fc9-8c89-eb2cd201f71c')
+    }
     stage 'Checkout'
         checkout scm
         echo env.BRANCH_NAME
@@ -13,7 +17,7 @@ node {
         stage('SonarQube Analysis') {
             def mvnHome =  tool name: 'M3', type: 'maven'
             withSonarQubeEnv('sonarq') { 
-            sh "${mvnHome}/bin/mvn sonar:sonar -Dsonar.login=admin -Dsonar.password=Jmo=47558520"
+            sh "${mvnHome}/bin/mvn sonar:sonar -Dsonar.login=admin -Dsonar.password=${GENERALPASSWORD}"
             }
         }
   
