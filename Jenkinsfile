@@ -39,7 +39,7 @@ node {
 
         stage('Deploy to Tomcat') {
             sh 'cd target/'
-            deploy adapters: [tomcat9(credentialsId: 'dfc6effb-a846-47d1-8504-0e544d4c9c7a', path: '', url: 'http://104.43.137.120:8085/')], contextPath: 'dev', war: '**/*.war'
+            deploy adapters: [tomcat9(credentialsId: 'f9953ce9-74cc-4793-b16f-f29df93a1085', path: '', url: 'http://104.43.137.120:8085')], contextPath: 'dev', war: '**/*.war'
 
         }
 
@@ -52,7 +52,7 @@ node {
 
         stage('Deploy to Tomcat') {
             sh 'cd target/'
-            deploy adapters: [tomcat9(credentialsId: 'dfc6effb-a846-47d1-8504-0e544d4c9c7a', path: '', url: 'http://104.43.137.120:8086/')], contextPath: null, war: '**/*.war'
+            deploy adapters: [tomcat9(credentialsId: 'f9953ce9-74cc-4793-b16f-f29df93a1085', path: '', url: 'http://104.43.137.120:8085')], contextPath: null, war: '**/*.war'
 
         }
         
@@ -65,7 +65,7 @@ node {
 
         stage('Deploy to Tomcat') {
             sh 'cd target/'
-            deploy adapters: [tomcat9(credentialsId: 'dfc6effb-a846-47d1-8504-0e544d4c9c7a', path: '', url: 'http://104.43.137.120:8087/')], contextPath: null, war: '**/*.war'
+            deploy adapters: [tomcat9(credentialsId: 'f9953ce9-74cc-4793-b16f-f29df93a1085', path: '', url: 'http://104.43.137.120:8085')], contextPath: null, war: '**/*.war'
 
         }
         
