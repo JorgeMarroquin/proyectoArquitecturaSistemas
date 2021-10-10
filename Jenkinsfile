@@ -1,7 +1,7 @@
 node {
     stage 'Checkout'
         checkout scm
-        
+
     if (env.BRANCH_NAME.startsWith('PR')) {
         stage('test') {
             def mvnHome =  tool name: 'M3', type: 'maven'
@@ -33,7 +33,7 @@ node {
       
         stage("Compile WAR file ${env.BRANCH_NAME}") {
             def mvnHome =  tool name: 'M3', type: 'maven'
-            sh "${mvnHome}/bin/mvn clean install"
+            sh "${mvnHome}/bin/mvn -Dspring.profiles.active=dev clean install"
             sh "${mvnHome}/bin/mvn -Dspring.profiles.active=dev package"
         }
 
