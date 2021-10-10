@@ -1,5 +1,4 @@
 pipeline {
-    agent any
 
     environment {
         GENERALPASSWORD = credentialsId('aae686ba-0810-4fc9-8c89-eb2cd201f71c')
