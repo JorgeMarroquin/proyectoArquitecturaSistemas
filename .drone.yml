@@ -33,8 +33,9 @@ steps:
       from_secret: correoPassword    
     recipients:
         - jorge.marroquin.ochoa@gmail.com
+        - marroquin181358@unis.edu.gt
+    subject: Pipeline bad quelity gate
     body: El código no ha pasado la quality gate de sonarqube
-    attachment: build-result.xml
   when:
     event:
       include:     
@@ -102,7 +103,6 @@ steps:
         - marroquin181358@unis.edu.gt
     subject: Pipeline Status Drone
     body: La pipeline ha finalizado
-    attachment: build-result.xml
   when:
     event:
       include:     
