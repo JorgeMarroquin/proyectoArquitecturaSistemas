@@ -52,7 +52,7 @@ node {
 
         stage('Deploy to Tomcat') {
             sh 'cd target/'
-            deploy adapters: [tomcat9(credentialsId: 'f9953ce9-74cc-4793-b16f-f29df93a1085', path: '', url: 'http://104.43.137.120:8085')], contextPath: null, war: '**/*.war'
+            deploy adapters: [tomcat9(credentialsId: 'f9953ce9-74cc-4793-b16f-f29df93a1085', path: '', url: 'http://104.43.137.120:8085')], contextPath: 'uat', war: '**/*.war'
 
         }
         
@@ -65,7 +65,7 @@ node {
 
         stage('Deploy to Tomcat') {
             sh 'cd target/'
-            deploy adapters: [tomcat9(credentialsId: 'f9953ce9-74cc-4793-b16f-f29df93a1085', path: '', url: 'http://104.43.137.120:8085')], contextPath: null, war: '**/*.war'
+            deploy adapters: [tomcat9(credentialsId: 'f9953ce9-74cc-4793-b16f-f29df93a1085', path: '', url: 'http://104.43.137.120:8085')], contextPath: 'main', war: '**/*.war'
 
         }
         
