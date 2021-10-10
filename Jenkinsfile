@@ -40,8 +40,7 @@ node {
 
         stage('Deploy to Tomcat') {
             sh 'cd target/'
-            sh 'mv ventas-0.0.1-SNAPSHOT.war dev.war'
-            deploy adapters: [tomcat9(credentialsId: 'dfc6effb-a846-47d1-8504-0e544d4c9c7a', path: '', url: 'http://104.43.137.120:8085/')], contextPath: null, war: '**/*.war'
+            deploy adapters: [tomcat9(credentialsId: 'dfc6effb-a846-47d1-8504-0e544d4c9c7a', path: '', url: 'http://104.43.137.120:8085/')], contextPath: 'dev', war: '**/*.war'
 
         }
 
