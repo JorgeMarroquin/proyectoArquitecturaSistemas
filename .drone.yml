@@ -25,7 +25,7 @@ steps:
   image: drillster/drone-email
   settings:
     from: cakedaybakerywelcome@gmail.com
-    host: gsmtp.gmail.com
+    host: smtp.gmail.com
     port: 465
     username:
       from_secret: correo
@@ -34,7 +34,7 @@ steps:
     recipients:
         - jorge.marroquin.ochoa@gmail.com
         - marroquin181358@unis.edu.gt
-    subject: Pipeline bad quality gate
+    subject: Pipeline DRONE bad quality gate
     body: El codigo no ha pasado la quality gate de sonarqube
   when:
     event:
@@ -101,7 +101,7 @@ steps:
     recipients:
         - jorge.marroquin.ochoa@gmail.com
         - marroquin181358@unis.edu.gt
-    subject: Pipeline Status Drone
+    subject: Pipeline DRONE Status
     body: La pipeline ha finalizado
   when:
     event:
