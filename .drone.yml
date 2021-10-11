@@ -12,17 +12,6 @@ steps:
       include:     
       - pull_request
 
-steps:
-- name: code-analysis
-  image: aosapps/drone-sonar-plugin
-  settings:
-    sonar_host:
-      from_secret: sonar_host
-    sonar_token:
-      from_secret: sonar_token
-  + sources: target
-  + level: DEBUG
-
 - name: SonarQualityGate
   image: maven:3-jdk-11
   commands:
@@ -117,3 +106,4 @@ steps:
   when:
     status:      
     - failure
+    - success
