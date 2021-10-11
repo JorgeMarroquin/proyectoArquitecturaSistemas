@@ -21,6 +21,7 @@ steps:
     sonar_token:
       from_secret: sonar_token
   + sources: .
+  + level: DEBUG
 
 - name: SonarQualityGate
   image: maven:3-jdk-11
