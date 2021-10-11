@@ -32,7 +32,6 @@ steps:
     password: 
       from_secret: correoPassword    
     recipients:
-        - jorge.marroquin.ochoa@gmail.com
         - marroquin181358@unis.edu.gt
     subject: Pipeline DRONE bad quality gate
     body: El codigo no ha pasado la quality gate de sonarqube
