@@ -26,12 +26,13 @@ steps:
   settings:
     from: cakedaybakerywelcome@gmail.com
     host: smtp.gmail.com
-    port: 587
+    port: 465
     username:
       from_secret: correo
     password: 
       from_secret: correoPassword    
     recipients:
+        - jorge.marroquin.ochoa@gmail.com
         - marroquin181358@unis.edu.gt
     subject: Pipeline DRONE bad quality gate
     body: El codigo no ha pasado la quality gate de sonarqube
@@ -103,9 +104,5 @@ steps:
     subject: Pipeline DRONE Status
     body: La pipeline ha finalizado
   when:
-    event:
-      include:     
-      - push
     status:      
     - failure
-    - success
