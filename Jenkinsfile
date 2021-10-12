@@ -51,6 +51,7 @@ node {
       
         stage("Compile WAR file ${env.BRANCH_NAME}") {
             def mvnHome =  tool name: 'M3', type: 'maven'
+            sh "${mvnHome}/bin/mvn -Dspring.profiles.active=uat clean install"
             sh "${mvnHome}/bin/mvn -Dspring.profiles.active=uat package"
         }
 
@@ -64,6 +65,7 @@ node {
       
         stage("Compile WAR file ${env.BRANCH_NAME}") {
             def mvnHome =  tool name: 'M3', type: 'maven'
+            sh "${mvnHome}/bin/mvn -Dspring.profiles.active=main clean install"
             sh "${mvnHome}/bin/mvn -Dspring.profiles.active=main package"
         }
 
