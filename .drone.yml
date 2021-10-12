@@ -21,28 +21,6 @@ steps:
       include:     
       - pull_request
 
-- name: CorreoSonar
-  image: drillster/drone-email
-  settings:
-    from: cakedaybakerywelcome@gmail.com
-    host: smtp.gmail.com
-    port: 465
-    username:
-      from_secret: correo
-    password: 
-      from_secret: correoPassword    
-    recipients:
-        - jorge.marroquin.ochoa@gmail.com
-        - marroquin181358@unis.edu.gt
-    subject: Pipeline DRONE bad quality gate
-    body: El codigo no ha pasado la quality gate de sonarqube
-  when:
-    event:
-      include:     
-      - pull_request
-    status:      
-    - failure
-
 - name: tomcatDEV
   image: maven:3-jdk-11
   commands:
@@ -104,6 +82,9 @@ steps:
     subject: Pipeline DRONE Status
     body: La pipeline ha finalizado
   when:
+    event:
+      include:     
+      - push
     status:      
     - failure
     - success
