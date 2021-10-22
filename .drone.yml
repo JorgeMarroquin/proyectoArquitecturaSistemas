@@ -1,6 +1,5 @@
 kind: pipeline
 type: docker
-name: default
 
 steps:
 - name: test
@@ -46,12 +45,12 @@ steps:
         - marroquin181358@unis.edu.gt
     subject: Pipeline DRONE Status
     body: La pipeline ha finalizado
-    when:
-      event:
-        include:     
-        - pull_request
-      status:      
-      - failure 
+  when:
+    event:
+      include:     
+      - pull_request
+    status:      
+    - failure 
 
 - name: tomcatDEV
   image: maven:3-jdk-11
