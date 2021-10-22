@@ -97,6 +97,25 @@ steps:
       include:
       - push
 
+
+
+- name: slack
+  image: plugins/slack
+  settings:
+    webhook:
+      from_secret: slackWebhook
+    channel: drone
+    template: >
+      {{#success build.status}}
+        build {{build.number}} succeeded in branch ${DRONE_BRANCH}. Good job.
+      {{else}}
+        build {{build.number}} failed in branch ${DRONE_BRANCH}. Fix me please.
+      {{/success}}
+  when:
+    status:      
+    - failure 
+    - success
+
 - name: CorreoPipelineStatus
   image: drillster/drone-email
   settings:
@@ -115,24 +134,7 @@ steps:
       {{#success build.status}}
         Build {{build.number}} finalizada con el status {{build.status}} en la rama ${DRONE_BRANCH}
       {{else}}
-        Build {{build.number}} finalizada con el status {{build.status}} en la rama ${DRONE_BRANCH} con error en ${DRONE_FAILED_STEPS} {{build.link}}
-      {{/success}}
-  when:
-    status:      
-    - failure 
-    - success
-
-- name: slack
-  image: plugins/slack
-  settings:
-    webhook:
-      from_secret: slackWebhook
-    channel: drone
-    template: >
-      {{#success build.status}}
-        build {{build.number}} succeeded in branch ${DRONE_BRANCH}. Good job.
-      {{else}}
-        build {{build.number}} failed in branch ${DRONE_BRANCH}. Fix me please.
+        Build {{build.number}} finalizada con el status {{build.status}} en la rama ${DRONE_BRANCH} con error en ${DRONE_FAILED_STEPS}
       {{/success}}
   when:
     status:      
