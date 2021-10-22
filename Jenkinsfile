@@ -47,7 +47,7 @@ pipeline {
                     def mvnHome =  tool name: 'M3', type: 'maven'
                     sh "${mvnHome}/bin/mvn -Dspring.profiles.active=dev clean install"
                     sh "${mvnHome}/bin/mvn -Dspring.profiles.active=dev package"
-                }
+                
             }
 
             stage('Deploy to Tomcat') {
