@@ -111,9 +111,10 @@ steps:
         - jorge.marroquin.ochoa@gmail.com
         - marroquin181358@unis.edu.gt
     subject: Pipeline DRONE Status
-    body: La pipeline ha finalizado
+    body: La pipeline ha finalizado \n  Build {{build.number}} finailzada con el status {{build.status}}
+  when:
     status:      
-    - failure
+    - failure 
     - success
 
 - name: slack
@@ -128,7 +129,7 @@ steps:
       {{else}}
         build {{build.number}} failed. Fix me please.
       {{/success}}
-    when:
-      status:      
-      - failure 
-      - success
+  when:
+    status:      
+    - failure 
+    - success
