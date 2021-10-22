@@ -136,7 +136,7 @@ steps:
       {{else}}${DRONE_STEP_NAME}
         Build {{build.number}} finalizada con el status {{build.status}} en la rama ${DRONE_BRANCH} puedes ver los errores en {{build.link}}
       {{/success}}
-  + attachment: build-result.xml
++ attachment: build-result.xml
   when:
     status:      
     - failure 
