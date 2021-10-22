@@ -84,3 +84,16 @@ steps:
     status:      
     - failure
     - success
+
+- name: slack
+  image: plugins/slack
+  settings:
+    webhook:
+      from_secret: slackWebhook
+    channel: drone
+    template: >
+      {{#success build.status}}
+        build {{build.number}} succeeded. Good job.
+      {{else}}
+        build {{build.number}} failed. Fix me please.
+      {{/success}}
