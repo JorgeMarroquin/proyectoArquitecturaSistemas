@@ -36,8 +36,12 @@ steps:
         - marroquin181358@unis.edu.gt
     subject: Pipeline DRONE Status
     body: La pipeline ha finalizado
-    status:      
-    - failure
+    when:
+      event:
+        include:     
+        - pull_request
+      status:      
+      - failure 
 
 - name: tomcatDEV
   image: maven:3-jdk-11
