@@ -129,13 +129,14 @@ steps:
     recipients:
         - jorge.marroquin.ochoa@gmail.com
         - marroquin181358@unis.edu.gt
-    subject: Pipeline DRONE Status ${DRONE_BRANCH}
+    subject: Pipeline DRONE {{build.status}} ${DRONE_BRANCH}
     body: >
       {{#success build.status}}
-        Build {{build.number}} finalizada con el status {{build.status}} en la rama ${DRONE_BRANCH} con error en {${DRONE_FAILED_STEPS}} ${DRONE_BUILD_STATUS} stps $${DRONE_STEP_NUMBER} test ${#DRONE_FAILED_STEPS}
+        Build {{build.number}} finalizada con el status {{build.status}} en la rama ${DRONE_BRANCH} puedes ver los resultados en {{build.link}}
       {{else}}${DRONE_STEP_NAME}
-        Build {{build.number}} finalizada con el status {{build.status}} en la rama ${DRONE_BRANCH} con error en {${DRONE_FAILED_STEPS}} ${DRONE_BUILD_STATUS} stps $${DRONE_STEP_NUMBER} test ${#DRONE_FAILED_STEPS}
+        Build {{build.number}} finalizada con el status {{build.status}} en la rama ${DRONE_BRANCH} puedes ver los errores en {{build.link}}
       {{/success}}
+  + attachment: build-result.xml
   when:
     status:      
     - failure 
