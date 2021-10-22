@@ -111,7 +111,7 @@ steps:
         - jorge.marroquin.ochoa@gmail.com
         - marroquin181358@unis.edu.gt
     subject: Pipeline DRONE Status
-    body: Build {{build.number}} finalizada con el status {{build.status}} en la rama {{DRONE_BRANCH}}
+    body: Build {{build.number}} finalizada con el status {{build.status}} en la rama {${DRONE_BRANCH}}
   when:
     status:      
     - failure 
