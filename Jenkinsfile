@@ -1,8 +1,8 @@
 node {
 
-    environment {
-        GENERALPASSWORD = credentials('aae686ba-0810-4fc9-8c89-eb2cd201f71c')
-    }
+    try{
+
+    
     stage 'Checkout'
         checkout scm
 
@@ -81,15 +81,9 @@ node {
         slackSend channel: 'jenkins-pipeline', message: "Pipeline in ${env.BRANCH_NAME} finished with status ${currentBuild.result}", teamDomain: 'test-sa-mundo', tokenCredentialId: '216c0d8c-5fb2-4a82-b39c-3be85e57d9aa'
     } 
 
-    finally{
+    } catch(e){
+        echo "no"
+    } finally{
         slackSend channel: 'jenkins-pipeline', message: "SIUUPipeline in ${env.BRANCH_NAME} finished with status ${currentBuild.result}", teamDomain: 'test-sa-mundo', tokenCredentialId: '216c0d8c-5fb2-4a82-b39c-3be85e57d9aa'
     } 
-}
-
-post {
-  always {
-    node('awesome_node_label') {
-      slackSend channel: 'jenkins-pipeline', message: "SIUUPipeline in ${env.BRANCH_NAME} finished with status ${currentBuild.result}", teamDomain: 'test-sa-mundo', tokenCredentialId: '216c0d8c-5fb2-4a82-b39c-3be85e57d9aa'
-    }
-  }
 }
