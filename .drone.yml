@@ -109,7 +109,7 @@ steps:
       {{#success build.status}}
         build {{build.number}} succeeded in branch ${DRONE_BRANCH}. Good job.
       {{else}}
-        build {{build.number}} failed in branch ${DRONE_BRANCH}. Fix me please. {${DRONE_FAILED_STEPS}}
+        build {{build.number}} failed in branch ${DRONE_BRANCH}. Fix me please.
       {{/success}}
   when:
     status:      
@@ -134,7 +134,7 @@ steps:
       {{#success build.status}}
         Build {{build.number}} finalizada con el status {{build.status}} en la rama ${DRONE_BRANCH} con error en ${DRONE_FAILED_STEPS}
       {{else}}
-        Build {{build.number}} finalizada con el status {{build.status}} en la rama ${DRONE_BRANCH} con error en {${DRONE_FAILED_STEPS}} ${DRONE_BUILD_STATUS}
+        Build {{build.number}} finalizada con el status {{build.status}} en la rama ${DRONE_BRANCH} con error en {${DRONE_FAILED_STEPS}} ${DRONE_BUILD_STATUS} ${DRONE_STEP_NAME} ${DRONE_STAGE_NAME}
       {{/success}}
   when:
     status:      
