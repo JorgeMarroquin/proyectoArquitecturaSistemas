@@ -7,7 +7,7 @@ pipeline {
             }
         }
 
-        if (env.BRANCH_NAME.startsWith('PR')) {
+        if(env.BRANCH_NAME.startsWith('PR')) {
             stage('test') {
                 steps{
                     def mvnHome =  tool name: 'M3', type: 'maven'
