@@ -1,8 +1,5 @@
 node {
 
-    environment {
-        GENERALPASSWORD = credentials('aae686ba-0810-4fc9-8c89-eb2cd201f71c')
-    }
     stage 'Checkout'
         checkout scm
 
