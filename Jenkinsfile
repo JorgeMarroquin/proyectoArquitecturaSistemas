@@ -79,7 +79,11 @@ node {
 
     stage("Slack notification"){
         slackSend channel: 'jenkins-pipeline', message: "Pipeline in ${env.BRANCH_NAME} finished with status ${currentBuild.result}", teamDomain: 'test-sa-mundo', tokenCredentialId: '216c0d8c-5fb2-4a82-b39c-3be85e57d9aa'
-    }  
+    } 
+
+    finally{
+        slackSend channel: 'jenkins-pipeline', message: "SIUUPipeline in ${env.BRANCH_NAME} finished with status ${currentBuild.result}", teamDomain: 'test-sa-mundo', tokenCredentialId: '216c0d8c-5fb2-4a82-b39c-3be85e57d9aa'
+    } 
 }
 
 post {
