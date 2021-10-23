@@ -33,53 +33,21 @@ node {
             }
         }
     
-    }else if(env.BRANCH_NAME == 'dev') {
+    }else{
 
         try{
             stage("Compile WAR file ${env.BRANCH_NAME}") {
                 def mvnHome =  tool name: 'M3', type: 'maven'
-                sh "${mvnHome}/bin/mvn -Dspring.profiles.active=dev clean install"
-                sh "${mvnHome}/bin/mvn -Dspring.profiles.active=dev package"
+                sh "${mvnHome}/bin/mvn -Dspring.profiles.active=${env.BRANCH_NAME} clean install"
+                sh "${mvnHome}/bin/mvn -Dspring.profiles.active=${env.BRANCH_NAME} package"
             }
 
             stage('Deploy to Tomcat') {
                 sh 'cd target/'
-                deploy adapters: [tomcat9(credentialsId: 'f9953ce9-74cc-4793-b16f-f29df93a1085', path: '', url: 'http://104.43.137.120:8085')], contextPath: 'dev', war: '**/*.war'
+                deploy adapters: [tomcat9(credentialsId: 'f9953ce9-74cc-4793-b16f-f29df93a1085', path: '', url: 'http://104.43.137.120:8085')], contextPath: "${env.BRANCH_NAME}", war: '**/*.war'
             }
         }catch(e){
             slackSend channel: 'jenkins-pipeline', color: '#ff0000', message: "No se ha podido desplegar la aplicación de tomcat en la rama ${env.BRANCH_NAME}", teamDomain: 'test-sa-mundo', tokenCredentialId: '216c0d8c-5fb2-4a82-b39c-3be85e57d9aa'
         }
-      
-
-
-    }else if(env.BRANCH_NAME == 'uat') {
-      
-        stage("Compile WAR file ${env.BRANCH_NAME}") {
-            def mvnHome =  tool name: 'M3', type: 'maven'
-            sh "${mvnHome}/bin/mvn -Dspring.profiles.active=uat clean install"
-            sh "${mvnHome}/bin/mvn -Dspring.profiles.active=uat package"
-        }
-
-        stage('Deploy to Tomcat') {
-            sh 'cd target/'
-            deploy adapters: [tomcat9(credentialsId: 'f9953ce9-74cc-4793-b16f-f29df93a1085', path: '', url: 'http://104.43.137.120:8085')], contextPath: 'uat', war: '**/*.war'
-
-        }
-        
-    }else if(env.BRANCH_NAME == 'main') {
-      
-        stage("Compile WAR file ${env.BRANCH_NAME}") {
-            def mvnHome =  tool name: 'M3', type: 'maven'
-            sh "${mvnHome}/bin/mvn -Dspring.profiles.active=main clean install"
-            sh "${mvnHome}/bin/mvn -Dspring.profiles.active=main package"
-        }
-
-        stage('Deploy to Tomcat') {
-            sh 'cd target/'
-            deploy adapters: [tomcat9(credentialsId: 'f9953ce9-74cc-4793-b16f-f29df93a1085', path: '', url: 'http://104.43.137.120:8085')], contextPath: 'main', war: '**/*.war'
-
-        }
-        
-    }  
-
+    }
 }
