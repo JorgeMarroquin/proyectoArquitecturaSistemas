@@ -1,5 +1,5 @@
 kind: pipeline
-name: default
+type: docker
 
 steps:
 - name: test
@@ -12,14 +12,45 @@ steps:
       include:     
       - pull_request
 
-- name: SonarQualityGate
+- name: Sonarqube-analisis 
   image: maven:3-jdk-11
   commands:
-  - mvn sonar:sonar sonar-quality-gate:check -Dsonar.login=admin -Dsonar.password=Jmo=47558520 -Dsonar.host.url=http://104.43.137.120:9000
+    - mvn clean verify sonar:sonar -Dsonar.login=admin -Dsonar.password=Jmo=47558520 -Dsonar.host.url=http://104.43.137.120:9000
   when:
     event:
       include:     
       - pull_request
+
+- name: SonarQualityGate
+  image: maven:3-jdk-11
+  commands:
+  - mvn clean verify sonar:sonar sonar-quality-gate:check -Dsonar.login=admin -Dsonar.password=Jmo=47558520 -Dsonar.host.url=http://104.43.137.120:9000
+  when:
+    event:
+      include:     
+      - pull_request
+
+- name: CorreoPipelineStatusSonar
+  image: drillster/drone-email
+  settings:
+    from: cakedaybakerywelcome@gmail.com
+    host: smtp.gmail.com
+    port: 465
+    username:
+      from_secret: correo
+    password: 
+      from_secret: correoPassword    
+    recipients:
+        - jorge.marroquin.ochoa@gmail.com
+        - marroquin181358@unis.edu.gt
+    subject: Pipeline DRONE Status
+    body: La pipeline ha finalizado
+  when:
+    event:
+      include:     
+      - pull_request
+    status:      
+    - failure 
 
 - name: tomcatDEV
   image: maven:3-jdk-11
@@ -66,6 +97,23 @@ steps:
       include:
       - push
 
+- name: slack
+  image: plugins/slack
+  settings:
+    webhook:
+      from_secret: slackWebhook
+    channel: drone
+    template: >
+      {{#success build.status}}
+        build {{build.number}} succeeded in branch ${DRONE_BRANCH}. Good job.
+      {{else}}
+        build {{build.number}} failed in branch ${DRONE_BRANCH}. Fix me please.
+      {{/success}}
+  when:
+    status:      
+    - failure 
+    - success
+
 - name: CorreoPipelineStatus
   image: drillster/drone-email
   settings:
@@ -79,9 +127,15 @@ steps:
     recipients:
         - jorge.marroquin.ochoa@gmail.com
         - marroquin181358@unis.edu.gt
-        - jflores@unis.edu.gt
-    subject: Pipeline DRONE Status
-    body: La pipeline ha finalizado
+    subject: Pipeline No. {{build.number}} DRONE {{build.status}} ${DRONE_BRANCH}
+    body: >
+      {{#success build.status}}
+        Build {{build.number}} finalizada con el status {{build.status}} en la rama ${DRONE_BRANCH} puedes ver los resultados en {{build.link}}
+      {{else}}${DRONE_STEP_NAME}
+        Build {{build.number}} finalizada con el status {{build.status}} en la rama ${DRONE_BRANCH} puedes ver los errores en {{build.link}}
+      {{/success}}
+    attachment: build-result.xml
+  when:
     status:      
-    - failure
+    - failure 
     - success
