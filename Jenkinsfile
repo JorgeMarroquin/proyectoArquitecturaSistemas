@@ -1,8 +1,5 @@
 node {
 
-    try{
-
-    
     stage 'Checkout'
         checkout scm
 
@@ -25,27 +22,35 @@ node {
                 def qg = waitForQualityGate()
                 if (qg.status != 'OK') {
                     mail bcc: '', body: "Pipeline JENKINS SonarQube Failed in branch ${env.BRANCH_NAME}", cc: '', from: '', replyTo: '', subject: "Pipeline JENKINS QA failed", to: 'marroquin181358@unis.edu.gt'
+                    slackSend channel: 'jenkins-pipeline', color: '#ff0000', message: "El código no cumple con la revisión de calidad en la rama ${env.BRANCH_NAME}", teamDomain: 'test-sa-mundo', tokenCredentialId: '216c0d8c-5fb2-4a82-b39c-3be85e57d9aa'
                     error "Pipeline aborted due to quality gate failure: ${qg.status}"
                 }
                 if (qg.status == 'OK') {
                     mail bcc: '', body: "Pipeline JENKINS SonarQube Acepted in branch ${env.BRANCH_NAME}", cc: '', from: '', replyTo: '', subject: "Pipeline JENKINS QA acepted", to: 'marroquin181358@unis.edu.gt'
+                    slackSend channel: 'jenkins-pipeline', color: '#008f39', message: "El código ha pasado la revisión de calidad en la rama ${env.BRANCH_NAME}", teamDomain: 'test-sa-mundo', tokenCredentialId: '216c0d8c-5fb2-4a82-b39c-3be85e57d9aa'
+
                 }
             }
         }
     
     }else if(env.BRANCH_NAME == 'dev') {
+
+        try{
+            stage("Compile WAR file ${env.BRANCH_NAME}") {
+                def mvnHome =  tool name: 'M3', type: 'maven'
+                sh "${mvnHome}/bin/mvn -Dspring.profiles.active=dev clean install"
+                sh "${mvnHome}/bin/mvn -Dspring.profiles.active=dev package"
+            }
+
+            stage('Deploy to Tomcat') {
+                sh 'cd target/'
+                deploy adapters: [tomcat9(credentialsId: 'f9953ce9-74cc-4793-b16f-f29df93a1085', path: '', url: 'http://104.43.137.120:8085')], contextPath: 'dev', war: '**/*.war'
+            }
+        }catch(e){
+            slackSend channel: 'jenkins-pipeline', color: '#ff0000', message: "No se ha podido desplegar la aplicación de tomcat en la rama ${env.BRANCH_NAME}", teamDomain: 'test-sa-mundo', tokenCredentialId: '216c0d8c-5fb2-4a82-b39c-3be85e57d9aa'
+        }
       
-        stage("Compile WAR file ${env.BRANCH_NAME}") {
-            def mvnHome =  tool name: 'M3', type: 'maven'
-            sh "${mvnHome}/bin/mvn -Dspring.profiles.active=dev clean install"
-            sh "${mvnHome}/bin/mvn -Dspring.profiles.active=dev package"
-        }
 
-        stage('Deploy to Tomcat') {
-            sh 'cd target/'
-            deploy adapters: [tomcat9(credentialsId: 'f9953ce9-74cc-4793-b16f-f29df93a1085', path: '', url: 'http://104.43.137.120:8085')], contextPath: 'dev', war: '**/*.war'
-
-        }
 
     }else if(env.BRANCH_NAME == 'uat') {
       
@@ -77,13 +82,4 @@ node {
         
     }  
 
-    stage("Slack notification"){
-        slackSend channel: 'jenkins-pipeline', message: "Pipeline in ${env.BRANCH_NAME} finished with status ${currentBuild.result}", teamDomain: 'test-sa-mundo', tokenCredentialId: '216c0d8c-5fb2-4a82-b39c-3be85e57d9aa'
-    } 
-
-    } catch(e){
-        echo "noss"
-    } finally{
-        slackSend channel: 'jenkins-pipeline', message: "SIUUPipeline in ${env.BRANCH_NAME} finished with status ${currentBuild.currentResult}", teamDomain: 'test-sa-mundo', tokenCredentialId: '216c0d8c-5fb2-4a82-b39c-3be85e57d9aa'
-    } 
 }
