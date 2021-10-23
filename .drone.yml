@@ -97,8 +97,6 @@ steps:
       include:
       - push
 
-
-
 - name: slack
   image: plugins/slack
   settings:
@@ -129,7 +127,7 @@ steps:
     recipients:
         - jorge.marroquin.ochoa@gmail.com
         - marroquin181358@unis.edu.gt
-    subject: Pipeline DRONE {{build.status}} ${DRONE_BRANCH}
+    subject: Pipeline No. {{build.number}} DRONE {{build.status}} ${DRONE_BRANCH}
     body: >
       {{#success build.status}}
         Build {{build.number}} finalizada con el status {{build.status}} en la rama ${DRONE_BRANCH} puedes ver los resultados en {{build.link}}
