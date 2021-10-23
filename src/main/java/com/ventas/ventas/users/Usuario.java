@@ -46,22 +46,7 @@ public class Usuario {
 		return password;
 	}
 	public void setPassword(String password) {
-		if(true){
-			if(true){
-				if(true){
-					if(true){
-						if(true){
-							if(true){
-								if(true){
-									this.password = password;
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-		
+		this.password = password;
 	}
     
     
