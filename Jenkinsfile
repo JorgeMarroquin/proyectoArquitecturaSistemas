@@ -47,7 +47,7 @@ node {
                 deploy adapters: [tomcat9(credentialsId: 'f9953ce9-74cc-4793-b16f-f29df93a1085', path: '', url: 'http://104.43.137.120:8085')], contextPath: "${env.BRANCH_NAME}", war: '**/*.war'
             }
         }catch(e){
-            slackSend channel: 'jenkins-pipeline', color: '#ff0000', message: "No se ha podido desplegar la aplicación de tomcat en la rama ${env.BRANCH_NAME}", teamDomain: 'test-sa-mundo', tokenCredentialId: '216c0d8c-5fb2-4a82-b39c-3be85e57d9aa'
+            slackSend channel: 'jenkins-pipeline', color: '#ff0000', message: "${env.JOB_NAME}>>${env.BRANCH_NAME} #${BUILD_NUMBER}\nNo se ha podido desplegar la aplicación de tomcat en la rama ${env.BRANCH_NAME}", teamDomain: 'test-sa-mundo', tokenCredentialId: '216c0d8c-5fb2-4a82-b39c-3be85e57d9aa'
         }
     }
 }
