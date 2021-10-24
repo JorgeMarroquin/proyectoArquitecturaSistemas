@@ -20,9 +20,9 @@ pipeline {
 
         stage('Deploy to Tomcat') {
             steps {
-            sh 'cd target/'
+            
             sh "ls"
-            deploy adapters: [tomcat9(credentialsId: 'f9953ce9-74cc-4793-b16f-f29df93a1085', path: '', url: 'http://104.43.137.120:8085')], contextPath: "devv", war: '**/*.war'
+            deploy adapters: [tomcat9(credentialsId: 'f9953ce9-74cc-4793-b16f-f29df93a1085', path: 'target', url: 'http://104.43.137.120:8085')], contextPath: "devv", war: '**/*.war'
           }
         }     
     }
