@@ -6,8 +6,7 @@ pipeline {
     stages {
         stage('checkout'){
             steps{
-                echo GIT_BRANCH 
-                git 'https://github.com/JorgeMarroquin/proyectoArquitecturaSistemas.git'
+                checkout scm
                 }
             }
         stage("Compile WAR file") {
