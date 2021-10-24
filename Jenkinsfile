@@ -6,7 +6,7 @@ pipeline {
     stages {
         stage('checkout'){
             steps{
-                checkout scm
+                git url: 'https://github.com/JuanCaceresDL/arquitecturadesistemas.git'
                 }
             }
         stage("Compile WAR file") {
