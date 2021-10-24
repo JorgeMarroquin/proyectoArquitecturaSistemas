@@ -6,7 +6,7 @@ pipeline {
     stages {
         stage('checkout'){
             steps{
-                git branch: 'origin/development', url:'https://github.com/JuanCaceresDL/arquitecturadesistemas.git'
+                git branch: 'development', url:'https://github.com/JuanCaceresDL/arquitecturadesistemas.git'
                 }
             }
         stage("Compile WAR file") {
