@@ -6,7 +6,7 @@ public class Vista {
     private float total;
     private float ganancia;
 
-    /*public Vista(){
+    public Vista(){
 
     }
     
@@ -15,7 +15,7 @@ public class Vista {
         this.cantidad = cantidad;
         this.total = total;
         this.ganancia = ganancia;
-    }*/
+    }
 
     public String getTelcodigo() {
         return telcodigo;
