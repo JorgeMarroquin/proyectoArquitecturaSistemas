@@ -1,7 +1,7 @@
 pipeline {
     agent any 
     tools{
-      maven 'maven'
+      maven 'M3'
    }
     stages {
         stage('checkout'){
@@ -11,7 +11,7 @@ pipeline {
             }
         stage("Compile WAR file") {
             steps{
-             withMaven(maven: 'maven') {
+             withMaven(maven: 'M3') {
                 sh "mvn clean install"
                 sh "mvn package"
               }
