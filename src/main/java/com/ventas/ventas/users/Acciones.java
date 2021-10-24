@@ -10,7 +10,7 @@ public class Acciones {
     private String tabla;
     private Date fecha;
     
-    /*public Acciones(){
+    public Acciones(){
 
     }
 
@@ -21,7 +21,7 @@ public class Acciones {
         this.nombre = nombre;
         this.tabla = tabla;
         this.fecha = fecha;
-    }*/
+    }
 
     public int getAccionid() {
         return accionid;
