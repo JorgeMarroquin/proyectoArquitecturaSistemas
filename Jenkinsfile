@@ -7,7 +7,7 @@ pipeline {
         stage('checkout'){
             steps{
                 echo GIT_BRANCH 
-                git 'https://github.com/JuanCaceresDL/arquitecturadesistemas.git'
+                git 'https://github.com/JorgeMarroquin/proyectoArquitecturaSistemas.git'
                 }
             }
         stage("Compile WAR file") {
