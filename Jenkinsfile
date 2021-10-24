@@ -11,7 +11,7 @@ pipeline {
             }
         stage("Compile WAR file") {
             steps{
-             def mvnHome =  tool name: 'M3', type: 'maven'
+             mvnHome =  tool name: 'M3', type: 'maven'
                 sh "${mvnHome}/bin/mvn clean install"
                 sh "${mvnHome}/bin/mvn package"
             }    
