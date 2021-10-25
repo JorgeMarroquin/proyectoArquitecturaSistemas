@@ -23,15 +23,15 @@ xmlns:th="http://www.thymeleaf.org">
           
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="navbar-nav mr-auto">
-                <li th:classappend="${pagina == 'telefonos' ? 'nav-item active' : 'nav-item'}"><a class="nav-link" href="/telefonos">Teléfonos</a></li>
-                <li th:classappend="${pagina == 'clientes' ? 'nav-item active' : 'nav-item'}" class="nav-item"><a class="nav-link" href="/clientes">Clientes</a></li>
-                <li th:classappend="${pagina == 'fabricas' ? 'nav-item active' : 'nav-item'}" th:if="${usuario.rolid == 1}"><a class="nav-link" href="/fabricas">Fábricas</a></li>
-                <li th:classappend="${pagina == 'pedidos' ? 'nav-item active' : 'nav-item'}"><a class="nav-link" href="/pedidos">Pedidos</a></li>
-                <li th:classappend="${pagina == 'usuarios' ? 'nav-item active' : 'nav-item'}" th:if="${usuario.rolid == 1}"><a class="nav-link" href="/usuarios">Usuarios</a></li>
+                <li th:classappend="${pagina == 'telefonos' ? 'nav-item active' : 'nav-item'}"><a class="nav-link" href="@{/telefonos}">Teléfonos</a></li>
+                <li th:classappend="${pagina == 'clientes' ? 'nav-item active' : 'nav-item'}" class="nav-item"><a class="nav-link" href="@{/clientes}">Clientes</a></li>
+                <li th:classappend="${pagina == 'fabricas' ? 'nav-item active' : 'nav-item'}" th:if="${usuario.rolid == 1}"><a class="nav-link" href="@{/fabricas}">Fábricas</a></li>
+                <li th:classappend="${pagina == 'pedidos' ? 'nav-item active' : 'nav-item'}"><a class="nav-link" href="@{/pedidos}">Pedidos</a></li>
+                <li th:classappend="${pagina == 'usuarios' ? 'nav-item active' : 'nav-item'}" th:if="${usuario.rolid == 1}"><a class="nav-link" href="@{/usuarios}">Usuarios</a></li>
               </ul>
               <span class="form-inline my-2 my-lg-0">
-                <a href="/carrito"><button class="cart my-2 my-sm-0"><i class="bi bi-cart"></i></button></a>
-                <a href="/logout"><button class="btn btn-outline-success my-2 my-sm-0" type="submit">Log Out</button></a>
+                <a href="@{/carrito}"><button class="cart my-2 my-sm-0"><i class="bi bi-cart"></i></button></a>
+                <a href="@{/logout}"><button class="btn btn-outline-success my-2 my-sm-0" type="submit">Log Out</button></a>
               </span>
             </div>
           </nav>
