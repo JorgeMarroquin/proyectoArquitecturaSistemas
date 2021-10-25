@@ -18,7 +18,7 @@ xmlns:th="http://www.thymeleaf.org">
     
         <article class="col-sm-4 colcol">
             <center>
-            <a href="/telefonos"><button class="btn btn-secondary">Regresar</button></a>
+            <a th:href="@{/telefonos}"><button class="btn btn-secondary">Regresar</button></a>
             <br><br>
             <form class="d-flex justify-content-center" action ="#" th:action="@{'/restNewPedido/' + ${telefono.telcodigo} + '/2'}" method="post">
                 <input class="form-control" type="text" name="cantidadTel" placeholder="Pedido a Fabrica" th:value="${cantidadTel}"/>

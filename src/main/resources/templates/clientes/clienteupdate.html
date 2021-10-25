@@ -15,7 +15,7 @@ xmlns:th="http://www.thymeleaf.org">
     <div class="row">
     
         <article class="col-sm-4 justify-content-center">
-            <a href="/clientes"><button class="btn btn-dark">Regresar</button></a>
+            <a th:href="@{/clientes}"><button class="btn btn-dark">Regresar</button></a>
             <img id="pat" th:src="${modelo.patente}" class="imagen" alt="patente">
         </article>
 

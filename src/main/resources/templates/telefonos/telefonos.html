@@ -13,8 +13,8 @@ xmlns:th="http://www.thymeleaf.org">
     </section>
 
     <section class="container d-flex justify-content-center">
-      <a th:if="${usuario.rolid == 1}" href="/newTel"><button class="btn btn-dark">Nuevo Teléfono</button></a>&nbsp;
-      <a th:if="${usuario.rolid == 1}" href="/restTel"><button class="btn btn-dark">Consultar Fabricas</button></a>
+      <a th:if="${usuario.rolid == 1}" th:href="@{/newTel}"><button class="btn btn-dark">Nuevo Teléfono</button></a>&nbsp;
+      <a th:if="${usuario.rolid == 1}" th:href="@{/restTel}"><button class="btn btn-dark">Consultar Fabricas</button></a>
     </section>
 
     <section class="table-responsive container-fluid">

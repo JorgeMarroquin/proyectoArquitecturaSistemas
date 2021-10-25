@@ -12,7 +12,7 @@ xmlns:th="http://www.thymeleaf.org">
     </section>
 
     <section class="container d-flex justify-content-center">
-      <a th:if="${usuario.rolid == 1}" href="/restPedidos"><button class="btn btn-dark">Consultar Fabricas</button></a>
+      <a th:if="${usuario.rolid == 1}" th:href="@{/restPedidos}"><button class="btn btn-dark">Consultar Fabricas</button></a>
     </section>
 
     <br>
