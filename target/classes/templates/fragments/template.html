@@ -16,22 +16,22 @@ xmlns:th="http://www.thymeleaf.org">
 <body>
     <header th:fragment="header(pagina)">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <a class="navbar-brand" href="/"><i class="bi bi-house-fill"></i> TIGO</a> 
+            <a class="navbar-brand" th:href="@{/}"><i class="bi bi-house-fill"></i> TIGO</a> 
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
             </button>
           
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="navbar-nav mr-auto">
-                <li th:classappend="${pagina == 'telefonos' ? 'nav-item active' : 'nav-item'}"><a class="nav-link" href="@{/telefonos}">Teléfonos</a></li>
-                <li th:classappend="${pagina == 'clientes' ? 'nav-item active' : 'nav-item'}" class="nav-item"><a class="nav-link" href="@{/clientes}">Clientes</a></li>
-                <li th:classappend="${pagina == 'fabricas' ? 'nav-item active' : 'nav-item'}" th:if="${usuario.rolid == 1}"><a class="nav-link" href="@{/fabricas}">Fábricas</a></li>
-                <li th:classappend="${pagina == 'pedidos' ? 'nav-item active' : 'nav-item'}"><a class="nav-link" href="@{/pedidos}">Pedidos</a></li>
-                <li th:classappend="${pagina == 'usuarios' ? 'nav-item active' : 'nav-item'}" th:if="${usuario.rolid == 1}"><a class="nav-link" href="@{/usuarios}">Usuarios</a></li>
+                <li th:classappend="${pagina == 'telefonos' ? 'nav-item active' : 'nav-item'}"><a class="nav-link" th:href="@{/telefonos}">Teléfonos</a></li>
+                <li th:classappend="${pagina == 'clientes' ? 'nav-item active' : 'nav-item'}" class="nav-item"><a class="nav-link" th:href="@{/clientes}">Clientes</a></li>
+                <li th:classappend="${pagina == 'fabricas' ? 'nav-item active' : 'nav-item'}" th:if="${usuario.rolid == 1}"><a class="nav-link" th:href="@{/fabricas}">Fábricas</a></li>
+                <li th:classappend="${pagina == 'pedidos' ? 'nav-item active' : 'nav-item'}"><a class="nav-link" th:href="@{/pedidos}">Pedidos</a></li>
+                <li th:classappend="${pagina == 'usuarios' ? 'nav-item active' : 'nav-item'}" th:if="${usuario.rolid == 1}"><a class="nav-link" th:href="@{/usuarios}">Usuarios</a></li>
               </ul>
               <span class="form-inline my-2 my-lg-0">
-                <a href="@{/carrito}"><button class="cart my-2 my-sm-0"><i class="bi bi-cart"></i></button></a>
-                <a href="@{/logout}"><button class="btn btn-outline-success my-2 my-sm-0" type="submit">Log Out</button></a>
+                <a th:href="@{/carrito}"><button class="cart my-2 my-sm-0"><i class="bi bi-cart"></i></button></a>
+                <a th:href="@{/logout}"><button class="btn btn-outline-success my-2 my-sm-0" type="submit">Log Out</button></a>
               </span>
             </div>
           </nav>
