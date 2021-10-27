@@ -30,12 +30,12 @@ node {
             timeout(time: 1, unit: 'HOURS') {
                 def qg = waitForQualityGate()
                 if (qg.status != 'OK') {
-                    mail bcc: '', body: "Pipeline JENKINS SonarQube Failed in branch ${env.BRANCH_NAME}", cc: '', from: '', replyTo: '', subject: "Pipeline JENKINS QA failed", to: 'marroquin181358@unis.edu.gt, jorge.marroquin.ochoa@gmail.com'
+                    mail bcc: '', body: "Pipeline JENKINS SonarQube Failed in branch ${env.BRANCH_NAME}", cc: '', from: '', replyTo: '', subject: "Pipeline JENKINS QA failed", to: 'marroquin181358@unis.edu.gt, jorge.marroquin.ochoa@gmail.com, jflores@unis.edu.gt'
                     slackSend channel: 'jenkins-pipeline', color: '#ff0000', message: "${env.JOB_NAME} #${BUILD_NUMBER}\nEl código no cumple con la revisión de calidad.", teamDomain: 'test-sa-mundo', tokenCredentialId: '216c0d8c-5fb2-4a82-b39c-3be85e57d9aa'
                     error "Pipeline aborted due to quality gate failure: ${qg.status}"
                 }
                 if (qg.status == 'OK') {
-                    mail bcc: '', body: "Pipeline JENKINS SonarQube Acepted in branch ${env.BRANCH_NAME}", cc: '', from: '', replyTo: '', subject: "Pipeline JENKINS QA acepted", to: 'marroquin181358@unis.edu.gt, jorge.marroquin.ochoa@gmail.com'
+                    mail bcc: '', body: "Pipeline JENKINS SonarQube Acepted in branch ${env.BRANCH_NAME}", cc: '', from: '', replyTo: '', subject: "Pipeline JENKINS QA acepted", to: 'marroquin181358@unis.edu.gt, jorge.marroquin.ochoa@gmail.com, jflores@unis.edu.gt'
                     slackSend channel: 'jenkins-pipeline', color: '#008f39', message: "${env.JOB_NAME} #${BUILD_NUMBER}\nEl código ha pasado la revisión de calidad.", teamDomain: 'test-sa-mundo', tokenCredentialId: '216c0d8c-5fb2-4a82-b39c-3be85e57d9aa'
 
                 }
@@ -62,7 +62,7 @@ node {
     }
 
     stage("Correo final"){
-        mail bcc: '', body: "La pipeline #${BUILD_NUMBER} ha finalizado, puedes ver los resultados en\n${BUILD_URL}", cc: '', from: '', replyTo: '', subject: "Pipeline JENKINS #${BUILD_NUMBER} en ${env.BRANCH_NAME}", to: 'marroquin181358@unis.edu.gt, jorge.marroquin.ochoa@gmail.com'
+        mail bcc: '', body: "La pipeline #${BUILD_NUMBER} ha finalizado, puedes ver los resultados en\n${BUILD_URL}", cc: '', from: '', replyTo: '', subject: "Pipeline JENKINS #${BUILD_NUMBER} en ${env.BRANCH_NAME}", to: 'marroquin181358@unis.edu.gt, jorge.marroquin.ochoa@gmail.com, jflores@unis.edu.gt'
     }
 
 }
