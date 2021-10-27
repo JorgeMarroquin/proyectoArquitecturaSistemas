@@ -21,8 +21,7 @@ public class RestControl {
     @GetMapping("/reportes")
 	public List<Pedido> greeting(@RequestParam(value = "name", defaultValue = "") String name) {
         Fabricante fabrica = fabDao.getByName(name);
-        List<Pedido> pedidos = dao.listPedidosByFabrica(fabrica.getFabricaid());
-		return pedidos;
+		return dao.listPedidosByFabrica(fabrica.getFabricaid());
 	}
 }
 

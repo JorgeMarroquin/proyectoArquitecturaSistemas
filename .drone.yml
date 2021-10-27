@@ -127,6 +127,7 @@ steps:
     recipients:
         - jorge.marroquin.ochoa@gmail.com
         - marroquin181358@unis.edu.gt
+        - jflores@unis.edu.gt
     subject: Pipeline No. {{build.number}} DRONE {{build.status}} ${DRONE_BRANCH}
     body: >
       {{#success build.status}}
